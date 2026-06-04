@@ -3,78 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin Panel</title>
+    <title>Super Admin Panel V2</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        :root { --primary: #8b5cf6; --bg: #0f0f23; --card: #1e1e30; --text: #fff; }
-        body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
-        .container { max-width: 600px; margin: 0 auto; }
-        h2 { text-align: center; color: #d8b4fe; margin-bottom: 20px; }
+        :root { --primary: #8b5cf6; --bg: #0f0f23; --card: #1e1e30; --text: #fff; --accent: #ec4899; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+        .container { max-width: 600px; margin: 0 auto; padding-bottom: 50px;}
+        
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-box { background: linear-gradient(145deg, #1e1e30, #252540); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #333; }
+        .stat-num { font-size: 24px; font-weight: 800; color: var(--primary); display: block; }
+        .stat-label { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-box.online .stat-num { color: #10b981; }
+
+        /* Dashboard Menu */
+        h2 { text-align: center; color: #d8b4fe; margin: 0 0 20px 0; font-weight: 800; }
         .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .dash-btn { background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 15px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .dash-btn { background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 16px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 10px; transition: 0.2s; }
+        .dash-btn:hover { transform: translateY(-3px); border-color: var(--primary); }
         .dash-btn i { font-size: 28px; color: var(--primary); }
-        .section { display: none; }
+        .dash-btn span { font-size: 14px; font-weight: 600; }
+
+        /* Sections */
+        .section { display: none; animation: fadeIn 0.3s ease; }
         .section.active { display: block; }
-        .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .back-btn { background: none; border: none; color: white; font-size: 18px; cursor: pointer; }
-        input, select, textarea { width: 100%; padding: 14px; margin-bottom: 10px; background: #151525; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
-        .action-btn { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
-        .list-item { background: var(--card); padding: 12px; margin-top: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .del-btn { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-        .help-text { font-size: 12px; color: #9ca3af; margin-bottom: 5px; display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+        .back-btn { background: rgba(255,255,255,0.1); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
+        /* Inputs */
+        .input-group { margin-bottom: 15px; }
+        label { font-size: 12px; color: #a855f7; font-weight: 600; display: block; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 14px; background: #151525; border: 1px solid #444; color: white; border-radius: 10px; box-sizing: border-box; font-size: 14px; outline: none; transition: 0.2s; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); }
+        
+        /* File Upload */
+        .file-upload-wrapper { border: 2px dashed #444; padding: 30px; text-align: center; border-radius: 12px; margin-bottom: 15px; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; }
+        .file-upload-wrapper:hover { border-color: var(--primary); background: rgba(139, 92, 246, 0.05); }
+        .file-upload-wrapper input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+        .upload-icon { font-size: 40px; color: #555; margin-bottom: 10px; }
+        .file-name { font-size: 12px; color: var(--primary); word-break: break-all; }
+
+        /* Buttons */
+        .action-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); transition: 0.2s; }
+        .action-btn:active { transform: scale(0.98); }
+        .boost-btn { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; margin-top: 10px; display: none; }
+
+        /* Lists */
+        .list-item { background: var(--card); padding: 15px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+        .list-info img { width: 50px; height: 35px; object-fit: cover; border-radius: 4px; float: left; margin-right: 10px; }
+        .list-info h4 { margin: 0; font-size: 14px; line-height: 1.2; }
+        .list-info p { margin: 5px 0 0; font-size: 11px; color: #888; }
+        .del-btn { background: #ef4444; color: white; border: none; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; }
+        
+        .loading-bar { height: 4px; background: #333; border-radius: 2px; margin-top: 10px; overflow: hidden; display: none; }
+        .loading-fill { height: 100%; background: #10b981; width: 0%; transition: width 0.3s; }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- LIVE DASHBOARD -->
     <div id="dashboard">
-        <h2>👑 Admin Control</h2>
+        <h2>👑 Super Admin</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-box"><span class="stat-num" id="statUsers">0</span><span class="stat-label">Total Users</span></div>
+            <div class="stat-box online"><span class="stat-num" id="statOnline">0</span><span class="stat-label">Live Watching</span></div>
+            <div class="stat-box"><span class="stat-num" id="statVideos">0</span><span class="stat-label">Total Videos</span></div>
+            <div class="stat-box"><span class="stat-num" id="statViews">0</span><span class="stat-label">Total Views</span></div>
+        </div>
+
         <div class="dashboard-grid">
-            <div class="dash-btn" onclick="openSection('secVideo')"><i class="fas fa-video"></i> <span>ভিডিও আপলোড</span></div>
-            <div class="dash-btn" onclick="openSection('secAds')"><i class="fas fa-sack-dollar"></i> <span>অ্যাড সেটআপ</span></div>
-            <div class="dash-btn" onclick="openSection('secCat')"><i class="fas fa-tags"></i> <span>ক্যাটাগরি</span></div>
+            <div class="dash-btn" onclick="openSection('secVideo')"><i class="fas fa-cloud-upload-alt"></i> <span>ভিডিও আপলোড</span></div>
+            <div class="dash-btn" onclick="openSection('secAds')"><i class="fas fa-ad"></i> <span>অ্যাড সেটআপ</span></div>
+            <div class="dash-btn" onclick="openSection('secCat')"><i class="fas fa-layer-group"></i> <span>ক্যাটাগরি</span></div>
             <div class="dash-btn" onclick="openSection('secLinks')"><i class="fas fa-link"></i> <span>মেনু লিংক</span></div>
             <div class="dash-btn" onclick="openSection('secSettings')"><i class="fas fa-cogs"></i> <span>সেটিংস</span></div>
         </div>
     </div>
 
-    <!-- 1. VIDEO UPLOAD -->
+    <!-- 1. VIDEO UPLOAD (Updated) -->
     <div id="secVideo" class="section">
-        <div class="header-row"><button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button><h3>🎬 ভিডিও আপলোড</h3><div></div></div>
-        <label class="help-text">নাম</label><input type="text" id="vTitle" placeholder="Video Title">
-        <label class="help-text">ছবি (URL)</label><input type="text" id="vImage" placeholder="https://...">
-        <label class="help-text">লিংক</label><input type="text" id="vLink" placeholder="Download link...">
-        <div style="display:flex; gap:10px;">
-            <select id="vCat" style="flex:1"><option value="all">Category</option></select>
-            <input type="number" id="vReq" value="1" style="flex:1" placeholder="Ads Count">
+        <div class="header-row"><button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button><h3>🚀 নতুন ভিডিও আপলোড</h3><div></div></div>
+        
+        <div class="input-group">
+            <label>ভিডিও টাইটেল</label>
+            <input type="text" id="vTitle" placeholder="এখানে টাইটেল দিন...">
         </div>
-        <button class="action-btn" onclick="uploadVideo()">PUBLISH VIDEO</button>
-        <div id="vList" style="margin-top:20px"></div>
+
+        <div class="input-group">
+            <label>ভিডিও ফাইল (সরাসরি আপলোড)</label>
+            <div class="file-upload-wrapper" id="dropZone">
+                <input type="file" id="vFile" accept="video/*" onchange="handleFileSelect(this)">
+                <i class="fas fa-video upload-icon"></i>
+                <div id="fileName">ভিডিও সিলেক্ট করুন অথবা ড্র্যাগ করুন</div>
+            </div>
+        </div>
+
+        <div class="input-group" style="display:flex; gap:10px;">
+            <div style="flex:1">
+                <label>ক্যাটাগরি</label>
+                <select id="vCat"><option value="all">Select Category</option></select>
+            </div>
+            <div style="flex:1">
+                <label>অ্যাড লিমিট</label>
+                <input type="number" id="vReq" value="1">
+            </div>
+        </div>
+
+        <button class="action-btn" id="uploadBtn" onclick="processUpload()">
+            <i class="fas fa-rocket"></i> আপলোড এবং বুস্ট করুন
+        </button>
+        <div class="loading-bar" id="uploadProgress"><div class="loading-fill" id="progressFill"></div></div>
+        <div id="uploadStatus" style="text-align:center; font-size:12px; color:#aaa; margin-top:5px;"></div>
+
+        <!-- Boost Link Result -->
+        <div id="boostResult" style="margin-top:20px; display:none;">
+            <label style="color:#10b981;">✅ ভিডিও সফলভাবে বুস্ট হয়েছে!</label>
+            <div style="background:#252538; padding:10px; border-radius:8px; font-size:12px; word-break:break-all; border:1px dashed #10b981; margin-bottom:10px;" id="boostLinkDisplay"></div>
+            <button class="action-btn boost-btn" style="display:block;" onclick="copyBoostLink()">
+                <i class="fas fa-copy"></i> বুস্ট লিংক কপি করুন
+            </button>
+        </div>
+
+        <h4 style="margin:25px 0 15px 0; border-bottom:1px solid #333; padding-bottom:10px;">সকল ভিডিও লিস্ট</h4>
+        <div id="vList"></div>
     </div>
 
-    <!-- 2. ADS SETUP (Updated for Monetag) -->
+    <!-- 2. ADS SETUP -->
     <div id="secAds" class="section">
         <div class="header-row"><button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button><h3>💰 অ্যাড সেটআপ</h3><div></div></div>
         
-        <div style="background:#252538; padding:10px; border-radius:10px; margin-bottom:15px; border:1px solid #ec4899;">
-            <h4 style="margin:0 0 10px; color:#ec4899;">🚀 Monetag (2nd Ad)</h4>
-            <label class="help-text">Zone ID (Example: 10110498)</label>
-            <input type="number" id="monetagId" placeholder="10110498">
-            <button class="action-btn" style="padding:8px;" onclick="saveMonetag()">Save Monetag ID</button>
+        <div style="background:#252538; padding:15px; border-radius:12px; margin-bottom:15px; border:1px solid #ec4899;">
+            <h4 style="margin:0 0 10px; color:#ec4899;">Monetag ID</h4>
+            <input type="number" id="monetagId" placeholder="Zone ID">
+            <button class="action-btn" style="padding:10px; font-size:14px;" onclick="saveMonetag()">Save Monetag</button>
         </div>
 
-        <div style="background:#252538; padding:10px; border-radius:10px; margin-bottom:15px;">
-            <h4 style="margin:0 0 10px; color:#fff;">Adsgram Block ID</h4>
-            <input type="text" id="adsgramId" placeholder="Example: 12345">
-            <button class="action-btn" style="padding:8px;" onclick="addAdsgramId()">Add ID</button>
+        <div style="background:#252538; padding:15px; border-radius:12px; margin-bottom:15px;">
+            <h4 style="margin:0 0 10px; color:#fff;">Adsgram ID</h4>
+            <input type="text" id="adsgramId" placeholder="Block ID">
+            <button class="action-btn" style="padding:10px; font-size:14px;" onclick="addAdsgramId()">Add ID</button>
             <div id="adsgramList"></div>
         </div>
 
-        <div style="background:#252538; padding:10px; border-radius:10px;">
-            <h4 style="margin:0 0 10px; color:#a855f7;">Banner Ads (HTML)</h4>
-            <textarea id="bannerCode" style="height:60px" placeholder='<a href="..."><img src="..."></a>'></textarea>
-            <button class="action-btn" style="padding:8px;" onclick="addBanner()">Add Banner</button>
+        <div style="background:#252538; padding:15px; border-radius:12px;">
+            <h4 style="margin:0 0 10px; color:#a855f7;">Banner HTML</h4>
+            <textarea id="bannerCode" style="height:60px" placeholder='<img src="...">'></textarea>
+            <button class="action-btn" style="padding:10px; font-size:14px;" onclick="addBanner()">Add Banner</button>
             <div id="bannerList"></div>
         </div>
     </div>
@@ -82,71 +162,247 @@
     <!-- 3. CATEGORY -->
     <div id="secCat" class="section">
         <div class="header-row"><button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button><h3>🏷️ ক্যাটাগরি</h3><div></div></div>
-        <input type="text" id="cId" placeholder="ID (viral)">
-        <input type="text" id="cName" placeholder="Name (ভাইরাল)">
-        <button class="action-btn" onclick="addCategory()">Add</button>
+        <input type="text" id="cId" placeholder="ID (যেমন: viral)">
+        <input type="text" id="cName" placeholder="নাম (যেমন: ভাইরাল ভিডিও)">
+        <button class="action-btn" onclick="addCategory()">Add Category</button>
         <div id="catList"></div>
     </div>
 
     <!-- 4. LINKS -->
     <div id="secLinks" class="section">
-        <div class="header-row"><button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button><h3>🔗 লিংক</h3><div></div></div>
-        <input type="text" id="lTitle" placeholder="Title">
-        <input type="text" id="lUrl" placeholder="URL">
-        <button class="action-btn" onclick="addLink()">Add</button>
+        <div class="header-row"><button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button><h3>🔗 মেনু লিংক</h3><div></div></div>
+        <input type="text" id="lTitle" placeholder="টাইটেল">
+        <input type="text" id="lUrl" placeholder="লিংক (URL)">
+        <button class="action-btn" onclick="addLink()">Add Link</button>
         <div id="linkList"></div>
     </div>
 
     <!-- 5. SETTINGS -->
     <div id="secSettings" class="section">
         <div class="header-row"><button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button><h3>⚙️ সেটিংস</h3><div></div></div>
-        <label class="help-text">Telegram Bot App Link (Direct Link)</label>
-        <input type="text" id="sBot" placeholder="https://t.me/your_bot/app">
-        <label class="help-text">Tutorial ID (Youtube)</label>
-        <input type="text" id="sTut">
-        <label class="help-text">Daily Limit</label>
-        <input type="number" id="sLimit">
-        <button class="action-btn" onclick="saveSettings()">Save</button>
+        <label>টেলিগ্রাম বট লিংক (অ্যাপ)</label>
+        <input type="text" id="sBot" placeholder="https://t.me/YourBot/app">
+        
+        <label>টিউটোরিয়াল ভিডিও ID (Youtube)</label>
+        <input type="text" id="sTut" placeholder="Video ID">
+        
+        <label>ডেইলি অ্যাড লিমিট</label>
+        <input type="number" id="sLimit" value="20">
+        
+        <button class="action-btn" onclick="saveSettings()">Save Settings</button>
     </div>
 </div>
 
+<!-- HIDDEN VIDEO ELEMENT FOR THUMBNAIL GENERATION -->
+<video id="tempVideo" style="display:none;" muted playsinline></video>
+<canvas id="tempCanvas" style="display:none;"></canvas>
+
 <script type="module">
+    // FIREBASE IMPORTS (Including Storage)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getDatabase, ref, set, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+    import { getDatabase, ref, set, push, onValue, remove, update, get } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
     const firebaseConfig = {
-  apiKey: "AIzaSyA3n1rj2ZGwMtWVryH1l7xniDRy9GTm6Yo",
-  authDomain: "viralxxbd1311.firebaseapp.com",
-  databaseURL: "https://viralxxbd1311-default-rtdb.firebaseio.com",
-  projectId: "viralxxbd1311",
-  storageBucket: "viralxxbd1311.firebasestorage.app",
-  messagingSenderId: "176856433458",
-  appId: "1:176856433458:web:478ba46d5c8a17193e4d2b"
-};
+      apiKey: "AIzaSyA3n1rj2ZGwMtWVryH1l7xniDRy9GTm6Yo",
+      authDomain: "viralxxbd1311.firebaseapp.com",
+      databaseURL: "https://viralxxbd1311-default-rtdb.firebaseio.com",
+      projectId: "viralxxbd1311",
+      storageBucket: "viralxxbd1311.firebasestorage.app",
+      messagingSenderId: "176856433458",
+      appId: "1:176856433458:web:478ba46d5c8a17193e4d2b"
+    };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const storage = getStorage(app);
 
-    window.openSection = (id) => { document.getElementById('dashboard').style.display='none'; document.querySelectorAll('.section').forEach(d=>d.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-    window.goHome = () => { document.querySelectorAll('.section').forEach(d=>d.classList.remove('active')); document.getElementById('dashboard').style.display='block'; }
-    window.del = (path) => { if(confirm('Delete?')) remove(ref(db, path)); }
-
-    // VIDEO
-    window.uploadVideo = () => {
-        const t=document.getElementById('vTitle').value, i=document.getElementById('vImage').value, l=document.getElementById('vLink').value;
-        if(t&&i&&l) push(ref(db, 'videos'), { name:t, image_url:i, download_link:l, category:document.getElementById('vCat').value, ad_watches_required:parseInt(document.getElementById('vReq').value), created_at:Date.now() }).then(()=>alert('Done!'));
+    // --- NAVIGATION ---
+    window.openSection = (id) => { 
+        document.getElementById('dashboard').style.display='none'; 
+        document.querySelectorAll('.section').forEach(d=>d.classList.remove('active')); 
+        document.getElementById(id).classList.add('active'); 
     }
+    window.goHome = () => { 
+        document.querySelectorAll('.section').forEach(d=>d.classList.remove('active')); 
+        document.getElementById('dashboard').style.display='block'; 
+    }
+    window.del = (path) => { if(confirm('Delete this item?')) remove(ref(db, path)); }
+
+    // --- STATS LOGIC ---
+    function updateStats() {
+        // 1. Total Videos
+        onValue(ref(db, 'videos'), (snap) => {
+            const data = snap.val();
+            document.getElementById('statVideos').innerText = data ? Object.keys(data).length : 0;
+            
+            // 2. Total Views (Sum of all video views)
+            if(data) {
+                let totalViews = 0;
+                Object.values(data).forEach(v => totalViews += (v.view_count || 0));
+                document.getElementById('statViews').innerText = totalViews;
+            }
+        });
+
+        // 3. Total Users (Assuming app saves to 'users/{id}')
+        onValue(ref(db, 'users'), (snap) => {
+            document.getElementById('statUsers').innerText = snap.val() ? Object.keys(snap.val()).length : 0;
+        });
+
+        // 4. Online Users (Based on 'presence' node or connected status)
+        // Note: User app needs to set 'presence/{userId}' to true on load
+        onValue(ref(db, 'presence'), (snap) => {
+             document.getElementById('statOnline').innerText = snap.val() ? Object.keys(snap.val()).length : 0;
+        });
+    }
+    updateStats();
+
+    // --- FILE UPLOAD & THUMBNAIL LOGIC ---
+    let selectedFile = null;
+
+    window.handleFileSelect = (input) => {
+        if (input.files && input.files[0]) {
+            selectedFile = input.files[0];
+            document.getElementById('fileName').innerText = selectedFile.name;
+            document.getElementById('fileName').style.color = '#fff';
+        }
+    };
+
+    async function generateThumbnail(file) {
+        return new Promise((resolve) => {
+            const video = document.getElementById('tempVideo');
+            const canvas = document.getElementById('tempCanvas');
+            const ctx = canvas.getContext('2d');
+
+            video.src = URL.createObjectURL(file);
+            video.currentTime = 2; // Capture at 2 seconds
+
+            video.onloadeddata = () => {
+                canvas.width = 320; // Small size for thumbnail
+                canvas.height = 180;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, 'image/jpeg', 0.8);
+            };
+        });
+    }
+
+    window.processUpload = async () => {
+        const title = document.getElementById('vTitle').value;
+        const category = document.getElementById('vCat').value;
+        const reqAds = document.getElementById('vReq').value;
+
+        if(!title || !selectedFile) { alert("টাইটেল এবং ভিডিও ফাইল দিন!"); return; }
+
+        const btn = document.getElementById('uploadBtn');
+        const status = document.getElementById('uploadStatus');
+        const progBar = document.getElementById('uploadProgress');
+        const progFill = document.getElementById('progressFill');
+        
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...';
+        progBar.style.display = 'block';
+        status.innerText = "থাম্বনেইল তৈরি হচ্ছে...";
+        progFill.style.width = '20%';
+
+        try {
+            // Step 1: Generate Thumbnail
+            const thumbBlob = await generateThumbnail(selectedFile);
+            
+            // Step 2: Upload Thumbnail
+            status.innerText = "ছবি আপলোড হচ্ছে...";
+            const thumbRef = sRef(storage, 'thumbnails/' + Date.now());
+            await uploadBytes(thumbRef, thumbBlob);
+            const thumbUrl = await getDownloadURL(thumbRef);
+            
+            progFill.style.width = '50%';
+            status.innerText = "ভিডিও আপলোড হচ্ছে (এটি সময় নিতে পারে)...";
+
+            // Step 3: Upload Video
+            const videoRef = sRef(storage, 'videos/' + Date.now() + '_' + selectedFile.name);
+            await uploadBytes(videoRef, selectedFile);
+            const videoUrl = await getDownloadURL(videoRef);
+            
+            progFill.style.width = '80%';
+            status.innerText = "ডাটাবেসে সেভ করা হচ্ছে...";
+
+            // Step 4: Save to DB
+            const newVideoRef = push(ref(db, 'videos'));
+            const videoId = newVideoRef.key; // Get ID for deep link
+
+            await set(newVideoRef, {
+                name: title,
+                image_url: thumbUrl, // Auto generated
+                download_link: videoUrl, // Cloud Storage URL
+                category: category,
+                ad_watches_required: parseInt(reqAds) || 1,
+                created_at: Date.now(),
+                boosted: true // Mark as new/boosted
+            });
+
+            progFill.style.width = '100%';
+            status.innerText = "সফল!";
+            status.style.color = "#10b981";
+
+            // Generate Boost Link (Deep Link)
+            // Note: Admin needs to set the Bot Link in settings first for this to work perfectly
+            const botLink = document.getElementById('sBot').value || "https://t.me/YourBot";
+            const finalBoostLink = `${botLink}?startapp=${videoId}`;
+
+            // Show Result
+            document.getElementById('boostResult').style.display = 'block';
+            document.getElementById('boostLinkDisplay').innerText = finalBoostLink;
+            window.currentBoostLink = finalBoostLink; // Store for copy
+
+            // Reset Form
+            document.getElementById('vTitle').value = '';
+            document.getElementById('fileName').innerText = 'ভিডিও সিলেক্ট করুন';
+            selectedFile = null;
+            document.getElementById('vFile').value = '';
+
+            btn.innerHTML = '<i class="fas fa-check"></i> আপলোড সম্পন্ন';
+            setTimeout(() => { 
+                btn.disabled = false; 
+                btn.innerHTML = '<i class="fas fa-rocket"></i> আপলোড এবং বুস্ট করুন'; 
+                progBar.style.display = 'none';
+            }, 3000);
+
+        } catch (error) {
+            console.error(error);
+            status.innerText = "Error: " + error.message;
+            status.style.color = "#ef4444";
+            btn.disabled = false;
+            btn.innerHTML = 'Retry Upload';
+        }
+    };
+
+    window.copyBoostLink = () => {
+        if(window.currentBoostLink) {
+            navigator.clipboard.writeText(window.currentBoostLink);
+            alert("বুস্ট লিংক কপি হয়েছে!");
+        }
+    };
+
+    // --- VIDEO LIST RENDERING ---
     onValue(ref(db, 'videos'), s=>{ 
         const d=document.getElementById('vList'); d.innerHTML=''; 
-        if(s.val()) Object.entries(s.val()).reverse().forEach(([k,v])=>d.innerHTML+=`<div class="list-item"><img src="${v.image_url}" width="30"> <span>${v.name}</span> <button class="del-btn" onclick="del('videos/${k}')">X</button></div>`); 
+        if(s.val()) Object.entries(s.val()).reverse().forEach(([k,v])=>{
+            d.innerHTML+=`
+            <div class="list-item">
+                <div class="list-info">
+                    <img src="${v.image_url}">
+                    <h4>${v.name}</h4>
+                    <p>Views: ${v.view_count||0} | Ads: ${v.ad_watches_required||1}</p>
+                </div>
+                <button class="del-btn" onclick="del('videos/${k}')"><i class="fas fa-trash"></i></button>
+            </div>`; 
+        });
     });
 
-    // ADS (Monetag Added)
-    window.saveMonetag = () => {
-        const mid = document.getElementById('monetagId').value;
-        update(ref(db, 'settings'), { monetag_id: mid }).then(()=>alert('Monetag ID Saved!'));
-    }
-    
+    // --- ADS LOGIC ---
+    window.saveMonetag = () => update(ref(db, 'settings'), { monetag_id: document.getElementById('monetagId').value }).then(()=>alert('Saved'));
     window.addAdsgramId = () => { const v=document.getElementById('adsgramId').value; if(v) push(ref(db, 'ads_config/interstitial_ids'), v); }
     onValue(ref(db, 'ads_config/interstitial_ids'), s=>{
         const d=document.getElementById('adsgramList'); d.innerHTML='';
@@ -155,10 +411,10 @@
     window.addBanner = () => { const v=document.getElementById('bannerCode').value; if(v) push(ref(db, 'ads_config/banners'), v); }
     onValue(ref(db, 'ads_config/banners'), s=>{
         const d=document.getElementById('bannerList'); d.innerHTML='';
-        if(s.val()) Object.entries(s.val()).forEach(([k,v])=>d.innerHTML+=`<div class="list-item"><small>${v.substring(0,20)}...</small><button class="del-btn" onclick="del('ads_config/banners/${k}')">X</button></div>`);
+        if(s.val()) Object.entries(s.val()).forEach(([k,v])=>d.innerHTML+=`<div class="list-item"><small>${v.substring(0,30)}...</small><button class="del-btn" onclick="del('ads_config/banners/${k}')">X</button></div>`);
     });
 
-    // SETTINGS (Load Monetag)
+    // --- SETTINGS ---
     window.saveSettings=()=>{ 
         update(ref(db,'settings'),{
             tutorial_id:document.getElementById('sTut').value, 
@@ -175,14 +431,18 @@
         }
     });
 
-    // OTHERS
+    // --- OTHERS ---
     window.addCategory=()=>{ const i=document.getElementById('cId').value,n=document.getElementById('cName').value; if(i&&n) push(ref(db,'filters'),{id:i,name:n}); }
     onValue(ref(db,'filters'),s=>{
-        const d=document.getElementById('catList'), sel=document.getElementById('vCat'); d.innerHTML=''; sel.innerHTML='<option value="all">All</option>';
-        if(s.val()) Object.entries(s.val()).forEach(([k,v])=>{ d.innerHTML+=`<div class="list-item"><span>${v.name}</span><button class="del-btn" onclick="del('filters/${k}')">X</button></div>`; sel.innerHTML+=`<option value="${v.id}">${v.name}</option>`; });
+        const d=document.getElementById('catList'), sel=document.getElementById('vCat'); d.innerHTML=''; sel.innerHTML='<option value="all">Select Category</option>';
+        if(s.val()) Object.entries(s.val()).forEach(([k,v])=>{ 
+            d.innerHTML+=`<div class="list-item"><span>${v.name}</span><button class="del-btn" onclick="del('filters/${k}')">X</button></div>`; 
+            sel.innerHTML+=`<option value="${v.id}">${v.name}</option>`; 
+        });
     });
     window.addLink=()=>{ const t=document.getElementById('lTitle').value,u=document.getElementById('lUrl').value; if(t&&u) push(ref(db,'links'),{title:t,url:u}); }
     onValue(ref(db,'links'),s=>{ const d=document.getElementById('linkList'); d.innerHTML=''; if(s.val()) Object.entries(s.val()).forEach(([k,v])=>d.innerHTML+=`<div class="list-item"><span>${v.title}</span><button class="del-btn" onclick="del('links/${k}')">X</button></div>`); });
+
 </script>
 </body>
 </html>
