@@ -39,13 +39,25 @@
         label { font-size: 12px; color: #a855f7; font-weight: 600; display: block; margin-bottom: 5px; }
         input, select, textarea { width: 100%; padding: 14px; background: #151525; border: 1px solid #444; color: white; border-radius: 10px; box-sizing: border-box; font-size: 14px; outline: none; transition: 0.2s; }
         input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(139, 92, 246, 0.2); }
-        
+
+        /* Thumbnail Toggle */
+        .thumb-toggle { display: flex; gap: 10px; margin-bottom: 12px; }
+        .thumb-tab { flex: 1; padding: 10px; background: #151525; border: 1px solid #444; color: #aaa; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; text-align: center; transition: 0.2s; }
+        .thumb-tab.active { background: rgba(139,92,246,0.2); border-color: var(--primary); color: #fff; }
+        .thumb-panel { display: none; }
+        .thumb-panel.active { display: block; }
+
         /* File Upload */
         .file-upload-wrapper { border: 2px dashed #444; padding: 30px; text-align: center; border-radius: 12px; margin-bottom: 15px; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; }
         .file-upload-wrapper:hover { border-color: var(--primary); background: rgba(139, 92, 246, 0.05); }
         .file-upload-wrapper input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
         .upload-icon { font-size: 40px; color: #555; margin-bottom: 10px; }
         .file-name { font-size: 12px; color: var(--primary); word-break: break-all; }
+
+        /* Thumbnail Preview */
+        .thumb-preview-box { width: 100%; height: 160px; background: #151525; border: 1px solid #444; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-top: 10px; }
+        .thumb-preview-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; }
+        .thumb-preview-box .no-preview { color: #555; font-size: 13px; }
 
         /* Buttons */
         .action-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); transition: 0.2s; }
@@ -86,13 +98,45 @@
         </div>
     </div>
 
-    <!-- 1. VIDEO UPLOAD (Updated) -->
+    <!-- 1. VIDEO UPLOAD -->
     <div id="secVideo" class="section">
         <div class="header-row"><button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i></button><h3>🚀 নতুন ভিডিও আপলোড</h3><div></div></div>
         
         <div class="input-group">
             <label>ভিডিও টাইটেল</label>
             <input type="text" id="vTitle" placeholder="এখানে টাইটেল দিন...">
+        </div>
+
+        <!-- THUMBNAIL SECTION (Updated) -->
+        <div class="input-group">
+            <label>থাম্বনেইল সেট করুন</label>
+            <div class="thumb-toggle">
+                <div class="thumb-tab active" id="tabFile" onclick="switchThumbTab('file')">
+                    <i class="fas fa-upload"></i> ছবি আপলোড
+                </div>
+                <div class="thumb-tab" id="tabUrl" onclick="switchThumbTab('url')">
+                    <i class="fas fa-link"></i> লিংক দিন
+                </div>
+            </div>
+
+            <!-- Panel: File Upload -->
+            <div class="thumb-panel active" id="panelFile">
+                <div class="file-upload-wrapper" id="thumbDropZone">
+                    <input type="file" id="thumbFile" accept="image/*" onchange="handleThumbSelect(this)">
+                    <i class="fas fa-image upload-icon"></i>
+                    <div id="thumbFileName">থাম্বনেইল ছবি সিলেক্ট করুন</div>
+                </div>
+            </div>
+
+            <!-- Panel: URL Input -->
+            <div class="thumb-panel" id="panelUrl">
+                <input type="text" id="thumbUrl" placeholder="https://example.com/image.jpg" oninput="previewFromUrl(this.value)">
+            </div>
+
+            <!-- Preview -->
+            <div class="thumb-preview-box" id="thumbPreview">
+                <span class="no-preview"><i class="fas fa-image"></i> প্রিভিউ দেখাবে এখানে</span>
+            </div>
         </div>
 
         <div class="input-group">
@@ -123,7 +167,7 @@
 
         <!-- Boost Link Result -->
         <div id="boostResult" style="margin-top:20px; display:none;">
-            <label style="color:#10b981;">✅ ভিডিও সফলভাবে বুস্ট হয়েছে!</label>
+            <label style="color:#10b981;">✅ ভিডিও সফলভাবে বুস্ট হয়েছে!</label>
             <div style="background:#252538; padding:10px; border-radius:8px; font-size:12px; word-break:break-all; border:1px dashed #10b981; margin-bottom:10px;" id="boostLinkDisplay"></div>
             <button class="action-btn boost-btn" style="display:block;" onclick="copyBoostLink()">
                 <i class="fas fa-copy"></i> বুস্ট লিংক কপি করুন
@@ -183,7 +227,7 @@
         <label>টেলিগ্রাম বট লিংক (অ্যাপ)</label>
         <input type="text" id="sBot" placeholder="https://t.me/YourBot/app">
         
-        <label>টিউটোরিয়াল ভিডিও ID (Youtube)</label>
+        <label>টিউটোরিয়াল ভিডিও ID (Youtube)</label>
         <input type="text" id="sTut" placeholder="Video ID">
         
         <label>ডেইলি অ্যাড লিমিট</label>
@@ -193,12 +237,7 @@
     </div>
 </div>
 
-<!-- HIDDEN VIDEO ELEMENT FOR THUMBNAIL GENERATION -->
-<video id="tempVideo" style="display:none;" muted playsinline></video>
-<canvas id="tempCanvas" style="display:none;"></canvas>
-
 <script type="module">
-    // FIREBASE IMPORTS (Including Storage)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getDatabase, ref, set, push, onValue, remove, update, get } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
     import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
@@ -231,35 +270,63 @@
 
     // --- STATS LOGIC ---
     function updateStats() {
-        // 1. Total Videos
         onValue(ref(db, 'videos'), (snap) => {
             const data = snap.val();
             document.getElementById('statVideos').innerText = data ? Object.keys(data).length : 0;
-            
-            // 2. Total Views (Sum of all video views)
             if(data) {
                 let totalViews = 0;
                 Object.values(data).forEach(v => totalViews += (v.view_count || 0));
                 document.getElementById('statViews').innerText = totalViews;
             }
         });
-
-        // 3. Total Users (Assuming app saves to 'users/{id}')
         onValue(ref(db, 'users'), (snap) => {
             document.getElementById('statUsers').innerText = snap.val() ? Object.keys(snap.val()).length : 0;
         });
-
-        // 4. Online Users (Based on 'presence' node or connected status)
-        // Note: User app needs to set 'presence/{userId}' to true on load
         onValue(ref(db, 'presence'), (snap) => {
              document.getElementById('statOnline').innerText = snap.val() ? Object.keys(snap.val()).length : 0;
         });
     }
     updateStats();
 
-    // --- FILE UPLOAD & THUMBNAIL LOGIC ---
-    let selectedFile = null;
+    // --- THUMBNAIL TAB SWITCH ---
+    window.switchThumbTab = (mode) => {
+        document.getElementById('tabFile').classList.toggle('active', mode === 'file');
+        document.getElementById('tabUrl').classList.toggle('active', mode === 'url');
+        document.getElementById('panelFile').classList.toggle('active', mode === 'file');
+        document.getElementById('panelUrl').classList.toggle('active', mode === 'url');
+        // Clear the other input
+        if (mode === 'file') { document.getElementById('thumbUrl').value = ''; }
+        else { document.getElementById('thumbFile').value = ''; window.selectedThumbFile = null; }
+    };
 
+    // --- THUMBNAIL FILE SELECT ---
+    let selectedThumbFile = null;
+    window.handleThumbSelect = (input) => {
+        if (input.files && input.files[0]) {
+            selectedThumbFile = input.files[0];
+            document.getElementById('thumbFileName').innerText = selectedThumbFile.name;
+            document.getElementById('thumbFileName').style.color = '#fff';
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('thumbPreview').innerHTML = `<img src="${e.target.result}" alt="preview">`;
+            };
+            reader.readAsDataURL(selectedThumbFile);
+        }
+    };
+
+    // --- THUMBNAIL URL PREVIEW ---
+    window.previewFromUrl = (url) => {
+        const preview = document.getElementById('thumbPreview');
+        if (url) {
+            preview.innerHTML = `<img src="${url}" alt="preview" onerror="this.parentElement.innerHTML='<span class=\\'no-preview\\'><i class=\\'fas fa-exclamation-triangle\\'></i> লিংক ভুল বা লোড হচ্ছে না</span>'">`;
+        } else {
+            preview.innerHTML = `<span class="no-preview"><i class="fas fa-image"></i> প্রিভিউ দেখাবে এখানে</span>`;
+        }
+    };
+
+    // --- VIDEO FILE SELECT ---
+    let selectedFile = null;
     window.handleFileSelect = (input) => {
         if (input.files && input.files[0]) {
             selectedFile = input.files[0];
@@ -268,33 +335,17 @@
         }
     };
 
-    async function generateThumbnail(file) {
-        return new Promise((resolve) => {
-            const video = document.getElementById('tempVideo');
-            const canvas = document.getElementById('tempCanvas');
-            const ctx = canvas.getContext('2d');
-
-            video.src = URL.createObjectURL(file);
-            video.currentTime = 2; // Capture at 2 seconds
-
-            video.onloadeddata = () => {
-                canvas.width = 320; // Small size for thumbnail
-                canvas.height = 180;
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                
-                canvas.toBlob((blob) => {
-                    resolve(blob);
-                }, 'image/jpeg', 0.8);
-            };
-        });
-    }
-
+    // --- MAIN UPLOAD PROCESS ---
     window.processUpload = async () => {
         const title = document.getElementById('vTitle').value;
         const category = document.getElementById('vCat').value;
         const reqAds = document.getElementById('vReq').value;
+        const thumbUrlInput = document.getElementById('thumbUrl').value.trim();
+        const activeTab = document.getElementById('tabFile').classList.contains('active') ? 'file' : 'url';
 
-        if(!title || !selectedFile) { alert("টাইটেল এবং ভিডিও ফাইল দিন!"); return; }
+        if (!title || !selectedFile) { alert("টাইটেল এবং ভিডিও ফাইল দিন!"); return; }
+        if (activeTab === 'file' && !selectedThumbFile) { alert("থাম্বনেইল ছবি সিলেক্ট করুন!"); return; }
+        if (activeTab === 'url' && !thumbUrlInput) { alert("থাম্বনেইল লিংক দিন!"); return; }
 
         const btn = document.getElementById('uploadBtn');
         const status = document.getElementById('uploadStatus');
@@ -304,23 +355,26 @@
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> প্রসেসিং হচ্ছে...';
         progBar.style.display = 'block';
-        status.innerText = "থাম্বনেইল তৈরি হচ্ছে...";
-        progFill.style.width = '20%';
 
         try {
-            // Step 1: Generate Thumbnail
-            const thumbBlob = await generateThumbnail(selectedFile);
-            
-            // Step 2: Upload Thumbnail
-            status.innerText = "ছবি আপলোড হচ্ছে...";
-            const thumbRef = sRef(storage, 'thumbnails/' + Date.now());
-            await uploadBytes(thumbRef, thumbBlob);
-            const thumbUrl = await getDownloadURL(thumbRef);
-            
-            progFill.style.width = '50%';
-            status.innerText = "ভিডিও আপলোড হচ্ছে (এটি সময় নিতে পারে)...";
+            let thumbUrl = '';
 
-            // Step 3: Upload Video
+            if (activeTab === 'file') {
+                // Upload thumbnail image to Firebase Storage
+                status.innerText = "থাম্বনেইল আপলোড হচ্ছে...";
+                progFill.style.width = '20%';
+                const thumbRef = sRef(storage, 'thumbnails/' + Date.now() + '_' + selectedThumbFile.name);
+                await uploadBytes(thumbRef, selectedThumbFile);
+                thumbUrl = await getDownloadURL(thumbRef);
+            } else {
+                // Use provided URL directly
+                thumbUrl = thumbUrlInput;
+            }
+
+            progFill.style.width = '50%';
+            status.innerText = "ভিডিও আপলোড হচ্ছে (এটি সময় নিতে পারে)...";
+
+            // Upload Video
             const videoRef = sRef(storage, 'videos/' + Date.now() + '_' + selectedFile.name);
             await uploadBytes(videoRef, selectedFile);
             const videoUrl = await getDownloadURL(videoRef);
@@ -328,39 +382,42 @@
             progFill.style.width = '80%';
             status.innerText = "ডাটাবেসে সেভ করা হচ্ছে...";
 
-            // Step 4: Save to DB
+            // Save to DB
             const newVideoRef = push(ref(db, 'videos'));
-            const videoId = newVideoRef.key; // Get ID for deep link
+            const videoId = newVideoRef.key;
 
             await set(newVideoRef, {
                 name: title,
-                image_url: thumbUrl, // Auto generated
-                download_link: videoUrl, // Cloud Storage URL
+                image_url: thumbUrl,
+                download_link: videoUrl,
                 category: category,
                 ad_watches_required: parseInt(reqAds) || 1,
                 created_at: Date.now(),
-                boosted: true // Mark as new/boosted
+                boosted: true
             });
 
             progFill.style.width = '100%';
             status.innerText = "সফল!";
             status.style.color = "#10b981";
 
-            // Generate Boost Link (Deep Link)
-            // Note: Admin needs to set the Bot Link in settings first for this to work perfectly
+            // Generate Boost Link
             const botLink = document.getElementById('sBot').value || "https://t.me/YourBot";
             const finalBoostLink = `${botLink}?startapp=${videoId}`;
 
-            // Show Result
             document.getElementById('boostResult').style.display = 'block';
             document.getElementById('boostLinkDisplay').innerText = finalBoostLink;
-            window.currentBoostLink = finalBoostLink; // Store for copy
+            window.currentBoostLink = finalBoostLink;
 
             // Reset Form
             document.getElementById('vTitle').value = '';
             document.getElementById('fileName').innerText = 'ভিডিও সিলেক্ট করুন';
+            document.getElementById('thumbFileName').innerText = 'থাম্বনেইল ছবি সিলেক্ট করুন';
+            document.getElementById('thumbUrl').value = '';
+            document.getElementById('thumbPreview').innerHTML = `<span class="no-preview"><i class="fas fa-image"></i> প্রিভিউ দেখাবে এখানে</span>`;
             selectedFile = null;
+            selectedThumbFile = null;
             document.getElementById('vFile').value = '';
+            document.getElementById('thumbFile').value = '';
 
             btn.innerHTML = '<i class="fas fa-check"></i> আপলোড সম্পন্ন';
             setTimeout(() => { 
@@ -381,11 +438,11 @@
     window.copyBoostLink = () => {
         if(window.currentBoostLink) {
             navigator.clipboard.writeText(window.currentBoostLink);
-            alert("বুস্ট লিংক কপি হয়েছে!");
+            alert("বুস্ট লিংক কপি হয়েছে!");
         }
     };
 
-    // --- VIDEO LIST RENDERING ---
+    // --- VIDEO LIST ---
     onValue(ref(db, 'videos'), s=>{ 
         const d=document.getElementById('vList'); d.innerHTML=''; 
         if(s.val()) Object.entries(s.val()).reverse().forEach(([k,v])=>{
@@ -401,7 +458,7 @@
         });
     });
 
-    // --- ADS LOGIC ---
+    // --- ADS ---
     window.saveMonetag = () => update(ref(db, 'settings'), { monetag_id: document.getElementById('monetagId').value }).then(()=>alert('Saved'));
     window.addAdsgramId = () => { const v=document.getElementById('adsgramId').value; if(v) push(ref(db, 'ads_config/interstitial_ids'), v); }
     onValue(ref(db, 'ads_config/interstitial_ids'), s=>{
