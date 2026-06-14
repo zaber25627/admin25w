@@ -9,7 +9,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Adsgram SDK -->
   <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
 <style>
@@ -65,7 +64,6 @@ body::before{
   background-size:46px 46px;mask-image:radial-gradient(circle at 50% 40%,#000,transparent 80%);
 }
 
-/* ===== PREMIUM FAST LOADER ===== */
 #loader{
   position:fixed;inset:0;z-index:99999;
   background:
@@ -109,14 +107,12 @@ body::before{
 .ld-dots i:nth-child(3){animation-delay:.3s;}
 @keyframes ldDot{0%,100%{background:rgba(255,255,255,.22);transform:scale(1);}50%{background:#22E0A1;transform:scale(1.5);}}
 
-/* ===== BAN SCREEN ===== */
 #banScreen{position:fixed;inset:0;z-index:88888;background:linear-gradient(150deg,#1a0620,#0d1240);display:none;align-items:center;justify-content:center;flex-direction:column;padding:28px;text-align:center;}
 .ban-icon{width:86px;height:86px;background:rgba(255,91,110,.18);border:2px solid rgba(255,91,110,.4);border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:2.3rem;color:var(--danger);margin:0 auto 20px;box-shadow:0 0 40px rgba(255,91,110,.3);animation:shake 0.6s ease infinite alternate;}
 @keyframes shake{from{transform:rotate(-3deg);}to{transform:rotate(3deg);}}
 #banScreen h2{color:#fff;font-size:1.35rem;font-weight:800;margin-bottom:10px;}
 #banMsg{color:rgba(255,255,255,.6);font-size:.88rem;font-weight:500;line-height:1.6;max-width:300px;}
 
-/* ===== CHANNEL JOIN OVERLAY ===== */
 #channelJoinOverlay{position:fixed;inset:0;z-index:77777;background:linear-gradient(150deg,#0a0520,#150a40);display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
 #channelJoinOverlay.show{display:flex;}
 .cj-card{background:rgba(255,255,255,.06);backdrop-filter:blur(26px);border:1px solid rgba(255,255,255,.14);border-radius:28px;padding:28px 22px;width:100%;max-width:420px;box-shadow:var(--shadow-lg);}
@@ -133,7 +129,6 @@ body::before{
 .btn-verify{width:100%;padding:16px;background:var(--grad-royal);border:none;border-radius:16px;color:#fff;font-weight:800;font-size:.96rem;cursor:pointer;letter-spacing:.3px;box-shadow:0 10px 30px rgba(124,92,255,.45);}
 .btn-verify:active{transform:scale(.98);}
 
-/* ===== WD LOADING OVERLAY ===== */
 #wdLoadingOverlay{position:fixed;inset:0;z-index:9999;background:rgba(7,5,20,.65);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
 #wdLoadingOverlay.show{display:flex;}
 .wd-load-box{background:rgba(255,255,255,.07);border-radius:24px;padding:28px;text-align:center;min-width:240px;border:1px solid rgba(255,255,255,.14);box-shadow:var(--shadow-lg);}
@@ -143,7 +138,6 @@ body::before{
 #wdLoadBar{height:100%;width:0%;background:linear-gradient(90deg,#7C5CFF,#A78BFA,#22E0A1);border-radius:99px;transition:width .4s ease;}
 @keyframes pulse{from{opacity:.6;}to{opacity:1;}}
 
-/* ===== WITHDRAW CONFIRM ===== */
 .wd-confirm-overlay{position:fixed;inset:0;z-index:8000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(7,5,20,.6);backdrop-filter:blur(16px);}
 .wd-confirm-overlay.show{display:flex;}
 .wd-confirm-card{background:var(--card-solid);border-radius:28px;padding:26px;width:100%;max-width:390px;animation:popUp .28s cubic-bezier(.2,.8,.4,1);box-shadow:var(--shadow-lg);border:1px solid var(--border-strong);}
@@ -157,7 +151,6 @@ body::before{
 .wd-confirm-cancel{flex:1;padding:14px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:15px;font-weight:700;font-size:.88rem;cursor:pointer;color:var(--text-muted);}
 .wd-confirm-ok{flex:2;padding:14px;background:var(--grad-royal);border:none;border-radius:15px;color:#fff;font-weight:800;font-size:.88rem;cursor:pointer;box-shadow:0 10px 26px rgba(124,92,255,.4);}
 
-/* ===== MAIN HEADER ===== */
 .header{padding:18px 18px 20px;position:relative;overflow:hidden;}
 .top-bar{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;gap:10px;}
 .user-pill{display:flex;align-items:center;gap:11px;}
@@ -168,7 +161,6 @@ body::before{
 .support-btn:active{transform:scale(.92);}
 #bot-name-display{font-size:.7rem;font-weight:800;color:var(--c2);background:var(--glass);border:1px solid var(--glass-border);padding:6px 13px;border-radius:99px;backdrop-filter:blur(10px);white-space:nowrap;}
 
-/* ===== BALANCE CARD ===== */
 .balance-card{
   margin:6px 14px 14px;padding:24px;border-radius:28px;
   background:linear-gradient(140deg,#5B3FE0 0%,#7C5CFF 48%,#A865FF 100%);
@@ -185,12 +177,10 @@ body::before{
 .stat-box h4{font-size:1.02rem;font-weight:800;color:#fff;font-family:'Sora',sans-serif;}
 .stat-box p{font-size:.66rem;color:rgba(255,255,255,.74);font-weight:700;letter-spacing:.5px;margin-top:2px;}
 
-/* ===== SECTION HEADERS ===== */
 .sec-head{font-size:.8rem;font-weight:800;color:var(--text);padding:18px 18px 10px;text-transform:uppercase;letter-spacing:1.2px;display:flex;align-items:center;gap:9px;}
 .sec-head i{color:var(--c2);}
 .sec-head::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border-strong),transparent);}
 
-/* ===== CARDS ===== */
 .premium-card{
   background:var(--card);backdrop-filter:blur(20px);margin:0 14px 14px;padding:20px;border-radius:var(--radius);
   box-shadow:var(--shadow-sm);border:1px solid var(--border);position:relative;overflow:hidden;
@@ -214,7 +204,6 @@ body::before{
 .btn-red:active{transform:scale(.97);}
 .flex-btns{display:flex;gap:10px;margin-top:12px;}
 
-/* ===== WITHDRAW NOTICE ===== */
 .wd-notice-card{
   margin:14px;border-radius:var(--radius);padding:0;overflow:hidden;position:relative;
   background:linear-gradient(135deg,#FFC65C,#FF9F43);
@@ -232,7 +221,6 @@ body::before{
 .wd-notice-txt h4{font-size:.92rem;font-weight:800;color:#fff;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
 .wd-notice-txt p{font-size:.82rem;font-weight:600;color:rgba(255,255,255,.95);line-height:1.55;white-space:pre-wrap;}
 
-/* ===== FEE PREVIEW BOX ===== */
 .fee-preview{background:rgba(124,92,255,.06);border:1px solid rgba(124,92,255,.2);border-radius:18px;padding:15px;margin-bottom:13px;display:none;}
 .fee-preview.show{display:block;animation:popUp .25s ease;}
 .fee-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:.84rem;border-bottom:1px dashed var(--border);}
@@ -244,7 +232,6 @@ body::before{
 .fee-row.final b{color:var(--success);font-size:1.08rem;font-weight:800;}
 .fee-row.charge b{color:var(--danger);}
 
-/* ===== AD GRID ===== */
 .ad-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 14px 6px;}
 .ad-card{background:var(--card);backdrop-filter:blur(18px);border-radius:22px;padding:18px;border:1px solid var(--border);cursor:pointer;transition:.22s;text-align:center;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;}
 .ad-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,92,255,.08),transparent 60%);pointer-events:none;}
@@ -256,7 +243,6 @@ body::before{
 .ad-card p{font-size:.7rem;color:var(--text-muted);font-weight:600;position:relative;z-index:1;}
 .ad-card .ad-reward{font-size:.74rem;font-weight:800;color:var(--success);background:rgba(34,224,161,.12);border-radius:99px;padding:3px 12px;margin-top:8px;display:inline-block;position:relative;z-index:1;}
 
-/* ===== TASK LIST ===== */
 .task-list{padding:0 14px 6px;display:flex;flex-direction:column;gap:11px;}
 .task-item{background:var(--card);backdrop-filter:blur(18px);border-radius:20px;padding:15px;display:flex;align-items:center;gap:13px;border:1px solid var(--border);box-shadow:var(--shadow-sm);cursor:pointer;transition:.2s;}
 .task-item:active{transform:scale(.98);}
@@ -268,7 +254,6 @@ body::before{
 .task-action{font-size:.78rem;font-weight:800;color:#fff;background:var(--grad-royal);padding:8px 15px;border-radius:99px;white-space:nowrap;box-shadow:0 6px 16px rgba(124,92,255,.3);}
 .task-item.done .task-action{background:rgba(34,224,161,.15);color:var(--success);box-shadow:none;}
 
-/* ===== REFERRAL ===== */
 .ref-link-box{background:rgba(124,92,255,.07);border:1px dashed rgba(124,92,255,.3);border-radius:16px;padding:14px;font-size:.78rem;font-weight:700;color:var(--c2);word-break:break-all;margin-bottom:13px;line-height:1.5;}
 .ref-required-banner{display:flex;align-items:flex-start;gap:13px;}
 .ref-required-banner i{font-size:1.5rem;color:var(--warn);margin-top:3px;}
@@ -288,7 +273,6 @@ body::before{
 .ref-task-btn.claimed{background:rgba(34,224,161,.15);color:var(--success);cursor:default;}
 .ref-task-btn.locked{background:rgba(255,255,255,.06);color:var(--text-muted);cursor:default;}
 
-/* ===== LEADERBOARD ===== */
 .leaderboard-hero{
   margin:14px;border-radius:28px;padding:26px 18px 22px;text-align:center;position:relative;overflow:hidden;
   background:linear-gradient(140deg,#5B3FE0,#7C5CFF 52%,#B964FF);
@@ -299,6 +283,7 @@ body::before{
 .lh-badge{position:relative;z-index:1;display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.26);border-radius:99px;padding:6px 15px;font-size:.66rem;font-weight:800;color:#fff;letter-spacing:1.2px;margin-bottom:12px;}
 .leaderboard-title{font-size:1.55rem;font-weight:800;color:#fff;position:relative;z-index:1;text-shadow:0 6px 22px rgba(0,0,0,.25);}
 .leaderboard-subtitle{font-size:.8rem;color:rgba(255,255,255,.7);font-weight:600;position:relative;z-index:1;margin-top:5px;}
+
 .podium-container{display:flex;justify-content:center;align-items:flex-end;gap:9px;padding:10px 12px 22px;}
 .podium-item{display:flex;flex-direction:column;align-items:center;flex:1;min-width:64px;max-width:108px;background:var(--card);backdrop-filter:blur(18px);border:1px solid var(--border-strong);border-radius:24px;padding:16px 8px 14px;box-shadow:var(--shadow-md);position:relative;transition:.25s;animation:podiumUp .55s cubic-bezier(.2,.8,.4,1) both;}
 .podium-item:active{transform:translateY(-4px);}
@@ -306,30 +291,36 @@ body::before{
 .podium-item .pod-rankbubble{position:absolute;top:-11px;left:50%;transform:translateX(-50%);font-size:.6rem;font-weight:800;color:#fff;padding:3px 11px;border-radius:99px;letter-spacing:.5px;box-shadow:0 4px 14px rgba(0,0,0,.3);}
 .podium-img{width:56px;height:56px;border-radius:18px;border:3px solid rgba(255,255,255,.95);box-shadow:0 8px 20px rgba(0,0,0,.3);object-fit:cover;}
 .crown{font-size:1rem;margin-bottom:6px;filter:drop-shadow(0 2px 5px rgba(0,0,0,.3));}
+
 .rank-1{order:2;transform:translateY(-16px) scale(1.08);background:linear-gradient(160deg,rgba(255,221,120,.22),rgba(255,159,67,.12));border-color:rgba(255,198,92,.55);box-shadow:0 20px 48px rgba(255,159,67,.4),inset 0 0 30px rgba(255,198,92,.15);z-index:3;animation-delay:.05s;}
 .rank-1 .podium-img{width:72px;height:72px;border-color:#FFC65C;border-radius:22px;box-shadow:0 0 0 4px rgba(255,198,92,.3),0 10px 24px rgba(255,159,67,.5);}
 .rank-1 .crown{color:#FFC65C;font-size:1.45rem;animation:crownBob 2s ease-in-out infinite;}
 .rank-1 .pod-rankbubble{background:linear-gradient(135deg,#FFC65C,#FF9F43);}
 @keyframes crownBob{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-4px) rotate(4deg);}}
+
 .rank-2{order:1;background:linear-gradient(160deg,rgba(220,228,245,.16),rgba(170,180,200,.08));border-color:rgba(190,200,220,.45);animation-delay:.12s;}
 .rank-2 .podium-img{border-color:#D4DBE8;}
 .rank-2 .crown{color:#D4DBE8;}
 .rank-2 .pod-rankbubble{background:linear-gradient(135deg,#C0C7D4,#8b93a3);}
+
 .rank-3{order:3;background:linear-gradient(160deg,rgba(255,190,140,.16),rgba(205,127,50,.08));border-color:rgba(225,150,80,.45);animation-delay:.18s;}
 .rank-3 .podium-img{border-color:#E59866;}
 .rank-3 .crown{color:#E59866;}
 .rank-3 .pod-rankbubble{background:linear-gradient(135deg,#E59866,#b86b35);}
+
 .rank-name{font-size:.74rem;font-weight:800;color:var(--text);margin-top:9px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:98px;}
 .rank-stats-col{display:flex;flex-direction:column;gap:4px;align-items:center;margin-top:7px;}
 .rank-badge{font-size:.6rem;font-weight:800;padding:3px 10px;border-radius:99px;text-align:center;}
 .badge-bal{background:rgba(124,92,255,.2);color:var(--c2);}
 .badge-ref{background:rgba(34,224,161,.18);color:var(--success);}
+
 .podium-secondary{display:flex;justify-content:center;gap:11px;padding:0 14px 8px;}
 .podium-secondary .podium-item{max-width:48%;flex:1;}
 .podium-secondary .rank-4,.podium-secondary .rank-5{order:0;transform:none;background:var(--card);}
 .podium-secondary .podium-img{width:52px;height:52px;border-color:#A78BFA;}
 .podium-secondary .crown{color:#A78BFA;font-size:.9rem;}
 .podium-secondary .pod-rankbubble{background:linear-gradient(135deg,#7C5CFF,#A78BFA);}
+
 .leader-list{padding:6px 14px 0;display:flex;flex-direction:column;gap:10px;}
 .leader-row{background:var(--card);backdrop-filter:blur(16px);border-radius:18px;padding:14px 15px;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border);border-left:3px solid var(--primary);box-shadow:var(--shadow-sm);transition:.2s;}
 .leader-row:active{transform:scale(.99);}
@@ -341,7 +332,6 @@ body::before{
 .leader-right-bal{font-size:.84rem;font-weight:800;color:var(--c2);}
 .leader-right-ref{font-size:.72rem;font-weight:700;color:var(--text-muted);}
 
-/* ===== WITHDRAW ===== */
 .wdh-tabs{display:flex;padding:0 14px;gap:7px;margin-bottom:11px;}
 .wdh-tab{flex:1;text-align:center;padding:10px 6px;border-radius:15px;background:var(--card);font-size:.72rem;font-weight:800;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);transition:.2s;}
 .wdh-tab.active{border-color:var(--primary);color:#fff;background:rgba(124,92,255,.16);}
@@ -351,6 +341,7 @@ body::before{
 .history-empty{text-align:center;padding:36px 14px;color:var(--text-muted);}
 .history-empty i{font-size:2.1rem;opacity:.35;display:block;margin-bottom:10px;}
 .history-empty p{font-size:.85rem;font-weight:600;}
+
 .wdh-item{background:var(--card);backdrop-filter:blur(16px);border-radius:20px;padding:0;margin-bottom:12px;border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;position:relative;}
 .wdh-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;}
 .wdh-item.s-pending::before{background:linear-gradient(180deg,var(--warn),#FF9F43);}
@@ -375,7 +366,6 @@ body::before{
 .wdh-brow.final b{color:var(--success);font-weight:800;font-size:.92rem;}
 .wdh-time{font-size:.68rem;color:rgba(167,139,250,.6);font-weight:600;text-align:right;margin-top:7px;}
 
-/* ===== PROMO CODE ===== */
 .promo-section{background:rgba(34,224,161,.05);border:1px dashed rgba(34,224,161,.3);border-radius:20px;padding:16px;margin:0 14px 14px;}
 .promo-title{font-size:.84rem;font-weight:800;color:var(--success);margin-bottom:11px;display:flex;align-items:center;gap:8px;}
 .promo-col{display:flex;flex-direction:column;gap:10px;}
@@ -384,7 +374,6 @@ body::before{
 .promo-input:focus{border-color:var(--success);box-shadow:0 0 0 3px rgba(34,224,161,.15);}
 .promo-apply-btn{width:100%;padding:14px 16px;background:var(--grad-emerald);color:#06241b;border:none;border-radius:15px;font-weight:800;font-size:.9rem;cursor:pointer;white-space:nowrap;box-shadow:0 8px 20px rgba(34,224,161,.3);display:flex;align-items:center;justify-content:center;gap:8px;}
 
-/* ===== SELL PAGE ===== */
 .sell-page-wrap{padding:0 0 8px;}
 .sell-header-banner{
   background:linear-gradient(140deg,#5B3FE0,#7C5CFF,#B964FF);
@@ -410,6 +399,7 @@ body::before{
 .sell-status{font-size:.7rem;font-weight:800;padding:3px 11px;border-radius:99px;display:inline-block;}
 .sell-status.on{background:rgba(34,224,161,.14);color:var(--success);}
 .sell-status.off{background:rgba(255,91,110,.12);color:var(--danger);}
+
 .logo-gmail{background:linear-gradient(135deg,rgba(234,67,53,.2),rgba(255,186,183,.12));}
 .logo-instagram{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);}
 .logo-facebook{background:linear-gradient(135deg,rgba(24,119,242,.25),rgba(66,165,255,.14));}
@@ -417,7 +407,6 @@ body::before{
 .logo-telegram{background:linear-gradient(135deg,rgba(36,161,222,.25),rgba(116,185,255,.16));}
 .logo-whatsapp{background:linear-gradient(135deg,rgba(37,211,102,.22),rgba(18,140,126,.14));}
 
-/* ===== SELL MODALS ===== */
 .sell-modal-overlay{position:fixed;inset:0;z-index:7777;background:rgba(7,5,20,.6);backdrop-filter:blur(16px);display:none;align-items:flex-end;justify-content:center;}
 .sell-modal-overlay.show{display:flex;}
 .sell-modal-card{background:var(--card-solid);border-radius:32px 32px 0 0;padding:26px 20px 36px;width:100%;max-width:480px;animation:slideUp .32s cubic-bezier(.2,.8,.4,1);box-shadow:0 -14px 50px rgba(0,0,0,.5);border-top:1px solid var(--border-strong);}
@@ -434,11 +423,9 @@ body::before{
 .sell-modal-cancel{flex:1;padding:15px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:15px;font-weight:700;font-size:.9rem;cursor:pointer;color:var(--text-muted);}
 .sell-modal-submit{flex:2;padding:15px;background:var(--grad-royal);border:none;border-radius:15px;color:#fff;font-weight:800;font-size:.9rem;cursor:pointer;box-shadow:0 8px 22px rgba(124,92,255,.35);display:flex;align-items:center;justify-content:center;gap:8px;}
 
-/* ===== TOAST ===== */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(22,20,46,.95);backdrop-filter:blur(22px);color:#fff;padding:13px 24px;border-radius:99px;font-size:.84rem;opacity:0;pointer-events:none;transition:.3s;z-index:99999;font-weight:700;max-width:320px;text-align:center;border:1px solid var(--border-strong);box-shadow:var(--shadow-md);}
 .toast.show{opacity:1;top:28px;}
 
-/* ===== STATUS NOTIFICATION ===== */
 .notif-overlay{position:fixed;inset:0;z-index:9500;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(7,5,20,.6);backdrop-filter:blur(16px);}
 .notif-overlay.show{display:flex;}
 .notif-card{width:100%;max-width:360px;border-radius:30px;padding:28px 22px;text-align:center;position:relative;overflow:hidden;animation:popUp .3s ease-out;box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,.1);}
@@ -463,7 +450,6 @@ body::before{
 .approved-card .notif-close-btn{background:var(--grad-emerald);color:#06241b;box-shadow:0 8px 20px rgba(34,224,161,.3);}
 .rejected-card .notif-close-btn{background:var(--grad-rose);color:#fff;box-shadow:0 8px 20px rgba(255,91,110,.3);}
 
-/* ===== BONUS MODAL ===== */
 .bonus-overlay{position:fixed;inset:0;z-index:9000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(7,5,20,.6);backdrop-filter:blur(16px);}
 .bonus-overlay.show{display:flex;}
 .bonus-card{background:linear-gradient(150deg,#141033,#1c1648);border-radius:30px;padding:28px 22px;width:100%;max-width:360px;text-align:center;position:relative;overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid rgba(255,198,92,.25);}
@@ -479,7 +465,6 @@ body::before{
 .bonus-claim{background:linear-gradient(135deg,var(--warn),#FF9F43);color:#3a2400;box-shadow:0 8px 20px rgba(255,198,92,.38);}
 .bonus-close{background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);}
 
-/* ===== PROFILE ===== */
 .profile-header{
   background:linear-gradient(140deg,#5B3FE0,#7C5CFF,#A78BFA);
   padding:30px 20px 34px;position:relative;overflow:hidden;
@@ -507,7 +492,6 @@ body::before{
 .plink-info p{font-size:.73rem;color:var(--text-muted);font-weight:600;margin-top:2px;}
 .plink-arrow{color:var(--text-muted);font-size:.8rem;opacity:.5;}
 
-/* ===== PROMO PAGE ===== */
 .promo-page-header{
   background:var(--grad-emerald);
   padding:26px 20px;position:relative;overflow:hidden;border-radius:0 0 30px 30px;box-shadow:0 14px 36px rgba(34,224,161,.3);
@@ -521,7 +505,6 @@ body::before{
 .promo-history-meta{font-size:.75rem;color:var(--text-muted);margin-top:3px;font-weight:600;}
 .promo-history-reward{font-size:.9rem;font-weight:800;color:var(--success);}
 
-/* ===== BOTTOM NAV ===== */
 .nav{
   position:fixed;bottom:0;left:0;right:0;z-index:5000;
   display:flex;background:rgba(15,14,39,.82);backdrop-filter:blur(28px);
@@ -536,7 +519,6 @@ body::before{
 .nav-label{font-size:.58rem;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;transition:.18s;}
 .nav-item-wrap.active .nav-label{color:var(--c2);}
 
-/* ===== PAGE SECTIONS ===== */
 .page-section{display:none;animation:pageIn .35s cubic-bezier(.2,.8,.3,1);}
 .page-section.active{display:block;}
 @keyframes pageIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
@@ -544,7 +526,6 @@ body::before{
 </head>
 <body>
 
-<!-- ===== PREMIUM FAST LOADER ===== -->
 <div id="loader">
   <div class="ld-grid"></div>
   <div class="ld-orbs">
@@ -562,14 +543,12 @@ body::before{
   </div>
 </div>
 
-<!-- ===== BAN SCREEN ===== -->
 <div id="banScreen">
   <div class="ban-icon"><i class="fas fa-ban"></i></div>
   <h2>Account Suspended</h2>
   <p id="banMsg">Your account has been suspended by the admin.</p>
 </div>
 
-<!-- ===== CHANNEL JOIN OVERLAY ===== -->
 <div id="channelJoinOverlay">
   <div class="cj-card">
     <div class="cj-icon"><i class="fab fa-telegram-plane" style="color:#fff;"></i></div>
@@ -580,7 +559,6 @@ body::before{
   </div>
 </div>
 
-<!-- ===== WD LOADING ===== -->
 <div id="wdLoadingOverlay">
   <div class="wd-load-box">
     <i class="fas fa-spinner fa-spin wd-load-spin"></i>
@@ -589,7 +567,6 @@ body::before{
   </div>
 </div>
 
-<!-- ===== WD CONFIRM ===== -->
 <div id="wdConfirmOverlay" class="wd-confirm-overlay">
   <div class="wd-confirm-card">
     <div class="wd-confirm-title"><i class="fas fa-paper-plane" style="color:var(--c2);"></i> উত্তোলনের বিস্তারিত</div>
@@ -602,7 +579,6 @@ body::before{
   </div>
 </div>
 
-<!-- ===== GMAIL SELL MODAL ===== -->
 <div id="gmailSellModal" class="sell-modal-overlay">
   <div class="sell-modal-card">
     <div class="sell-modal-title"><i class="fab fa-google" style="color:#EA4335;"></i> Gmail একাউন্ট বিক্রি</div>
@@ -618,7 +594,6 @@ body::before{
   </div>
 </div>
 
-<!-- ===== INSTAGRAM SELL MODAL ===== -->
 <div id="instaSellModal" class="sell-modal-overlay">
   <div class="sell-modal-card">
     <div class="sell-modal-title"><i class="fab fa-instagram" style="color:#E1306C;"></i> Instagram ID বিক্রি</div>
@@ -634,7 +609,6 @@ body::before{
   </div>
 </div>
 
-<!-- ===== FACEBOOK SELL MODAL ===== -->
 <div id="fbSellModal" class="sell-modal-overlay">
   <div class="sell-modal-card">
     <div class="sell-modal-title"><i class="fab fa-facebook" style="color:#1877F2;"></i> Facebook ID বিক্রি</div>
@@ -650,7 +624,6 @@ body::before{
   </div>
 </div>
 
-<!-- ===== TIKTOK SELL MODAL ===== -->
 <div id="tiktokSellModal" class="sell-modal-overlay">
   <div class="sell-modal-card">
     <div class="sell-modal-title"><i class="fab fa-tiktok" style="color:#fff;"></i> TikTok Account বিক্রি</div>
@@ -666,11 +639,10 @@ body::before{
   </div>
 </div>
 
-<!-- ===== TELEGRAM SELL MODAL ===== -->
 <div id="telegramSellModal" class="sell-modal-overlay">
   <div class="sell-modal-card">
     <div class="sell-modal-title"><i class="fab fa-telegram" style="color:#24A1DE;"></i> Telegram ID বিক্রি</div>
-    <div class="sell-modal-sub">নিচের তথ্য পূরণ করুন। সাবমিট করলে সরাসরি অ্যাডমিনের কাছে চলে যাবে, রিভিউ করার পর আপনার বটে ব্যালেন্স যোগ করা হবে।</div>
+    <div class="sell-modal-sub">নিচের তথ্য পূরণ করুন। সাবমিট করলে সরাসরি অ্যাডমিনের কাছে চলে যাবে।</div>
     <div class="sell-modal-price"><span id="telegramPriceShow">—</span> <span class="currency">টাকা</span><small>প্রতিটি Telegram ID-এর মূল্য</small></div>
     <input type="text" id="telegramUserInput" class="sell-modal-input" placeholder="Telegram ইউজারনেম (@username)">
     <input type="text" id="telegramPhoneInput" class="sell-modal-input" placeholder="Telegram ফোন নম্বর">
@@ -682,11 +654,10 @@ body::before{
   </div>
 </div>
 
-<!-- ===== WHATSAPP SELL MODAL ===== -->
 <div id="whatsappSellModal" class="sell-modal-overlay">
   <div class="sell-modal-card">
     <div class="sell-modal-title"><i class="fab fa-whatsapp" style="color:#25D366;"></i> WhatsApp ID বিক্রি</div>
-    <div class="sell-modal-sub">নিচের তথ্য পূরণ করুন। সাবমিট করলে সরাসরি অ্যাডমিনের কাছে চলে যাবে, রিভিউ করার পর আপনার বটে ব্যালেন্স যোগ করা হবে।</div>
+    <div class="sell-modal-sub">নিচের তথ্য পূরণ করুন। সাবমিট করলে সরাসরি অ্যাডমিনের কাছে চলে যাবে।</div>
     <div class="sell-modal-price"><span id="whatsappPriceShow">—</span> <span class="currency">টাকা</span><small>প্রতিটি WhatsApp ID-এর মূল্য</small></div>
     <input type="text" id="whatsappPhoneInput" class="sell-modal-input" placeholder="WhatsApp ফোন নম্বর">
     <input type="text" id="whatsappTypeInput" class="sell-modal-input" placeholder="একাউন্ট টাইপ (Normal/Business)">
@@ -700,7 +671,6 @@ body::before{
 
 <div id="toast" class="toast">Alert</div>
 
-<!-- ===== STATUS NOTIFICATION ===== -->
 <div id="statusNotifOverlay" class="notif-overlay">
   <div id="statusNotifCard" class="notif-card approved-card">
     <div class="notif-glow"></div>
@@ -718,7 +688,6 @@ body::before{
   </div>
 </div>
 
-<!-- ===== DAILY BONUS ===== -->
 <div id="bonusOverlay" class="bonus-overlay">
   <div class="bonus-card">
     <div class="bonus-glow"></div>
@@ -737,7 +706,6 @@ body::before{
 
 <div id="app" style="display:none;">
 
-  <!-- Header -->
   <div class="header">
     <div class="top-bar">
       <div class="user-pill">
@@ -758,7 +726,6 @@ body::before{
     </div>
   </div>
 
-  <!-- ===== HOME ===== -->
   <div id="page-home" class="page-section active">
     <div class="sec-head"><i class="fas fa-gift"></i> Daily Rewards</div>
     <div style="padding:0 14px 12px;">
@@ -770,7 +737,6 @@ body::before{
     <div id="task-area" class="task-list"></div>
   </div>
 
-  <!-- ===== REFERRAL ===== -->
   <div id="page-referral" class="page-section">
     <div class="premium-card">
       <div class="card-title"><i class="fas fa-link" style="color:#2DD4FF;"></i> Your Referral Link</div>
@@ -790,7 +756,6 @@ body::before{
     <div id="ref-tasks-area" class="ref-tasks-wrap"></div>
   </div>
 
-  <!-- ===== LEADERBOARD ===== -->
   <div id="page-leaderboard" class="page-section">
     <div class="leaderboard-hero">
       <div class="lh-badge"><i class="fas fa-crown"></i> VIP RANKING</div>
@@ -802,7 +767,6 @@ body::before{
     <div class="leader-list" id="leader-list-area"></div>
   </div>
 
-  <!-- ===== SELL PAGE ===== -->
   <div id="page-sell" class="page-section">
     <div class="sell-page-wrap">
       <div class="sell-header-banner">
@@ -813,9 +777,7 @@ body::before{
     </div>
   </div>
 
-  <!-- ===== WITHDRAW ===== -->
   <div id="page-withdraw" class="page-section">
-
     <div class="wd-notice-card" id="wdNoticeCard">
       <div class="wd-notice-inner">
         <div class="wd-notice-ic"><i class="fas fa-bullhorn"></i></div>
@@ -854,13 +816,11 @@ body::before{
         <div class="input-group"><select id="wd-method"><option value="">Loading Methods...</option></select></div>
         <div class="input-group"><input type="text" id="wd-account" placeholder="Account Number"></div>
         <div class="input-group"><input type="number" id="wd-amount" placeholder="Amount" oninput="updateFeePreview()"></div>
-
         <div class="fee-preview" id="feePreview">
           <div class="fee-row"><span><i class="fas fa-coins" style="margin-right:5px;"></i>Requested Amount</span><b id="fpRequested">0</b></div>
           <div class="fee-row charge"><span><i class="fas fa-percent" style="margin-right:5px;"></i>Withdraw Charge (<span id="fpChargePct">0%</span>)</span><b id="fpCharge">- 0</b></div>
           <div class="fee-row final"><span><i class="fas fa-hand-holding-usd" style="margin-right:5px;"></i>You Will Receive</span><b id="fpFinal">0</b></div>
         </div>
-
         <button class="btn-main" onclick="showWdConfirm()"><i class="fas fa-paper-plane"></i> Review &amp; Withdraw</button>
         <div style="font-size:.78rem;color:var(--danger);text-align:center;margin-top:14px;font-weight:700;" id="wd-notice">Minimum withdraw: ...</div>
       </div>
@@ -876,7 +836,6 @@ body::before{
     <div id="wd-history-area"><div class="history-empty"><i class="fas fa-inbox"></i><p>কোনো উত্তোলনের ইতিহাস নেই</p></div></div>
   </div>
 
-  <!-- ===== PROFILE ===== -->
   <div id="page-profile" class="page-section">
     <div class="profile-header">
       <div class="profile-avatar-wrap">
@@ -918,7 +877,6 @@ body::before{
     </div>
   </div>
 
-  <!-- ===== PROMO PAGE ===== -->
   <div id="page-promo" class="page-section">
     <div class="promo-page-header">
       <h2><i class="fas fa-tag"></i> Promo Codes</h2>
@@ -940,9 +898,8 @@ body::before{
     </div>
   </div>
 
-</div><!-- /#app -->
+</div>
 
-<!-- Bottom Navigation -->
 <div class="nav">
   <div class="nav-item-wrap active" onclick="switchTab('home', this)">
     <i class="fas fa-home nav-item"></i><span class="nav-label">Home</span>
@@ -1245,9 +1202,9 @@ function renderWdHistory(filter) {
         <div class="wdh-status ${status}">${stLabel}</div>
       </div>
       <div class="wdh-breakdown">
-        <div class="wdh-brow"><span><i class="fas fa-coins" style="margin-right:5px;"></i>Requested</span><b>${reqAmt} ${sym}</b></div>
-        <div class="wdh-brow charge"><span><i class="fas fa-percent" style="margin-right:5px;"></i>Charge (${chargePct}%)</span><b>- ${chargeAmt} ${sym}</b></div>
-        <div class="wdh-brow final"><span><i class="fas fa-hand-holding-usd" style="margin-right:5px;"></i>Final Amount</span><b>${finalAmt} ${sym}</b></div>
+        <div class="wdh-brow"><span><i class="fas fa-coins" style="margin-right:5px;"></i>Requested Amount</span><b>${reqAmt} ${sym}</b></div>
+        <div class="wdh-brow charge"><span><i class="fas fa-percent" style="margin-right:5px;"></i>Withdraw Charge (${chargePct}%)</span><b>- ${chargeAmt} ${sym}</b></div>
+        <div class="wdh-brow final"><span><i class="fas fa-hand-holding-usd" style="margin-right:5px;"></i>Final Received Amount</span><b>${finalAmt} ${sym}</b></div>
         <div class="wdh-time"><i class="far fa-clock"></i> ${date}</div>
       </div>
     </div>`;
@@ -1268,19 +1225,20 @@ function showStatusNotif(status, data) {
   document.getElementById('notifAmount').innerText = (showAmt || '—') + ' ' + sym;
   document.getElementById('notifStatus').innerText = isApprove ? '✅ Approved' : '❌ Rejected';
   document.getElementById('notifMsg').innerText    = isApprove
-    ? 'অভিনন্দন! 🎉 আপনার পেমেন্ট সফলভাবে প্রসেস করা হয়েছে।'
-    : 'আপনার রিকোয়েস্ট বাতিল করা হয়েছে। ব্যালেন্স ফেরত দেওয়া হয়েছে।';
+    ? 'অভিনন্দন! 🎉 আপনার পেমেন্ট সফলভাবে প্রসেস করা হয়েছে। আরও ইনকাম করতে থাকুন!'
+    : 'আপনার রিকোয়েস্ট বাতিল করা হয়েছে। ব্যালেন্স ফেরত দেওয়া হয়েছে। আবার চেষ্টা করুন।';
   document.getElementById('notifBtnIcon').className = isApprove ? 'fas fa-check-circle' : 'fas fa-times-circle';
   document.getElementById('notifBtnText').innerText = 'Got It!';
   document.getElementById('statusNotifOverlay').classList.add('show');
+
   const reqAmt = data.amount;
   const chPct  = (data.chargePct !== undefined) ? data.chargePct : getWithdrawChargePct();
   const chAmt  = (data.chargeAmount !== undefined) ? data.chargeAmount : +((Number(reqAmt) * chPct) / 100).toFixed(2);
   const fnAmt  = (data.finalAmount !== undefined)  ? data.finalAmount  : +(Number(reqAmt) - chAmt).toFixed(2);
   if (isApprove) {
-    notifyUser(`✅ <b>পেমেন্ট সফল!</b>\n💳 Method: <b>${data.method||'—'}</b>\n💰 Requested: <b>${reqAmt} ${sym}</b>\n➖ Charge: <b>${chAmt} ${sym}</b>\n🎯 Received: <b>${fnAmt} ${sym}</b>`);
+    notifyUser(`✅ <b>পেমেন্ট সফল হয়েছে!</b>\n━━━━━━━━━━━━━━━\n💳 Method: <b>${data.method||'—'}</b>\n🏦 Account: <code>${data.account||'—'}</code>\n💰 Requested: <b>${reqAmt} ${sym}</b>\n➖ Charge (${chPct}%): <b>${chAmt} ${sym}</b>\n🎯 Received: <b>${fnAmt} ${sym}</b>\n📌 Status: ✅ Approved\n━━━━━━━━━━━━━━━\n🎉 অভিনন্দন! আপনার উত্তোলন সম্পন্ন হয়েছে।`);
   } else {
-    notifyUser(`❌ <b>উত্তোলন বাতিল</b>\n💳 Method: <b>${data.method||'—'}</b>\n💰 Amount: <b>${reqAmt} ${sym}</b>\n💵 ব্যালেন্স ফেরত দেওয়া হয়েছে।`);
+    notifyUser(`❌ <b>উত্তোলন বাতিল হয়েছে</b>\n━━━━━━━━━━━━━━━\n💳 Method: <b>${data.method||'—'}</b>\n💰 Amount: <b>${reqAmt} ${sym}</b>\n📌 Status: ❌ Rejected\n━━━━━━━━━━━━━━━\n💵 আপনার ব্যালেন্স ফেরত দেওয়া হয়েছে।`);
   }
 }
 function closeStatusNotif() { document.getElementById('statusNotifOverlay').classList.remove('show'); }
@@ -1299,8 +1257,9 @@ function showWdConfirm() {
     <div class="wd-confirm-row"><b>Method</b><span>${method}</span></div>
     <div class="wd-confirm-row"><b>Account</b><span>${account}</span></div>
     <div class="wd-confirm-row"><b>Requested Amount</b><span>${amount} ${sym}</span></div>
-    <div class="wd-confirm-row"><b>Charge (${pct}%)</b><span style="color:var(--danger);font-weight:900;">- ${charge} ${sym}</span></div>
-    <div class="wd-confirm-row"><b>You Will Receive</b><span style="color:var(--success);font-weight:900;">${receive < 0 ? 0 : receive} ${sym}</span></div>`;
+    <div class="wd-confirm-row"><b>Withdraw Charge (${pct}%)</b><span style="color:var(--danger);font-weight:900;">- ${charge} ${sym}</span></div>
+    <div class="wd-confirm-row"><b>You Will Receive</b><span style="color:var(--success);font-weight:900;">${receive < 0 ? 0 : receive} ${sym}</span></div>
+    <div class="wd-confirm-row"><b>ব্যালেন্স থেকে কাটা হবে</b><span style="color:var(--danger);font-weight:900;">- ${amount} ${sym}</span></div>`;
   document.getElementById('wdConfirmOverlay').classList.add('show');
 }
 function closeWdConfirm() { document.getElementById('wdConfirmOverlay').classList.remove('show'); }
@@ -1313,9 +1272,9 @@ function showBonus() {
   const today = todayStr();
   if (appState.user.dailyBonusDate === today) return;
   const cfg   = appState.config;
-  const bonusAmt     = Number(cfg.dailyBonusAmount || 20);
-  const bonusAdCount = Number(cfg.bonusAdCount || 2);
-  document.getElementById('bonusAmt').innerText     = bonusAmt;
+  const bonusAmt      = Number(cfg.dailyBonusAmount || 20);
+  const bonusAdCount  = Number(cfg.bonusAdCount || 2);
+  document.getElementById('bonusAmt').innerText    = bonusAmt;
   document.getElementById('bonusSubText').innerText = `বোনাস নিতে হলে আপনাকে প্রথমে ${bonusAdCount}টি ছোট অ্যাড সম্পূর্ণ দেখতে হবে।`;
   document.getElementById('bonusOverlay').classList.add('show');
 }
@@ -1332,9 +1291,9 @@ async function claimDailyBonus() {
   const bonusAdCount = Number(appState.config.bonusAdCount || 2);
   const amt = Number(appState.config.dailyBonusAmount || 20);
   try {
-    for (let i = 0; i < bonusAdCount; i++) {
-      subText.innerText = `অ্যাড ${i+1}/${bonusAdCount} দেখছেন… একটু অপেক্ষা করুন`;
-      await showOneAd(i);
+    for (let i = 1; i <= bonusAdCount; i++) {
+      subText.innerText = `অ্যাড ${i}/${bonusAdCount} দেখছেন… একটু অপেক্ষা করুন`;
+      await showOneAd(i - 1);
     }
     const newBal  = (appState.user.balance || 0) + amt;
     const newEarn = (appState.user.totalEarned || 0) + amt;
@@ -1342,7 +1301,7 @@ async function claimDailyBonus() {
     hideBonus();
     toast('বোনাস ক্লেইম সফল! +' + amt);
     const sym = appState.config.currencySymbol || 'TK';
-    notifyUser(`🎁 <b>ডেইলি বোনাস ক্লেইম সফল!</b>\n💰 বোনাস: <b>+${amt} ${sym}</b>\n💳 নতুন ব্যালেন্স: <b>${newBal.toFixed(2)} ${sym}</b>`);
+    notifyUser(`🎁 <b>ডেইলি বোনাস ক্লেইম সফল!</b>\n━━━━━━━━━━━━━━━\n💰 বোনাস: <b>+${amt} ${sym}</b>\n💳 নতুন ব্যালেন্স: <b>${newBal.toFixed(2)} ${sym}</b>\n━━━━━━━━━━━━━━━\n🔥 দারুণ! প্রতিদিন লগইন করে বোনাস নিন!`);
   } catch(e) {
     toast(e.message === "Ad Closed or Cancelled"
       ? "অ্যাডটি সম্পূর্ণ দেখেননি, বোনাস বাতিল।"
@@ -1465,8 +1424,8 @@ async function applyPromoCode(inputId) {
   await db.ref('users/' + tgUser.id).update({ balance: newBal, totalEarned: newEarn, ['usedPromos/' + code]: true });
   await db.ref('promoCodes/' + code).update({ used: used + 1 });
   document.getElementById(inputId).value = '';
-  toast('🎉 প্রমো কোড সফল! +' + bonus + ' ' + sym);
-  notifyUser(`🎟️ <b>প্রমো কোড সফল!</b>\n🔖 Code: <code>${code}</code>\n💰 বোনাস: <b>+${bonus} ${sym}</b>\n💳 ব্যালেন্স: <b>${newBal.toFixed(2)} ${sym}</b>`);
+  toast('🎉 প্রমো কোড সফল! +' + bonus + ' ' + sym + ' যোগ হয়েছে!');
+  notifyUser(`🎟️ <b>প্রমো কোড সফলভাবে ব্যবহার হয়েছে!</b>\n━━━━━━━━━━━━━━━\n🔖 Code: <code>${code}</code>\n💰 বোনাস: <b>+${bonus} ${sym}</b>\n💳 নতুন ব্যালেন্স: <b>${newBal.toFixed(2)} ${sym}</b>`);
   if (inputId === 'promoPageInput') renderPromoPage();
 }
 
@@ -1492,7 +1451,7 @@ async function requestWithdraw() {
   const maxWd   = Number(appState.config.maxWithdraw || 0);
   const refs    = appState.user.referrals || 0;
   const needed  = Number(appState.config.withdrawRefRequired || 5);
-  if (refs < needed)  return toast(`উত্তোলনের জন্য ${needed}টি রেফার প্রয়োজন!`);
+  if (refs < needed)  return toast(`উত্তোলনের জন্য ${needed}টি রেফার প্রয়োজন! আপনার: ${refs}`);
   if (!method || !account || !amount) return toast('সব তথ্য পূরণ করুন');
   if (amount < minWd) return toast(`সর্বনিম্ন উত্তোলন: ${minWd}`);
   if (maxWd > 0 && amount > maxWd) return toast(`সর্বোচ্চ উত্তোলন: ${maxWd}`);
@@ -1500,9 +1459,9 @@ async function requestWithdraw() {
   const { pct: chargePct, charge: chargeAmount, receive } = calcCharge(amount);
   const finalAmount = receive < 0 ? 0 : receive;
   try {
-    showWdLoading('রিকোয়েস্ট যাচাই হচ্ছে…', 20);
+    showWdLoading('রিকোয়েস্ট যাচাই করা হচ্ছে…', 20);
     await new Promise(r => setTimeout(r, 600));
-    showWdLoading('তথ্য প্রসেস হচ্ছে…', 50);
+    showWdLoading('আপনার তথ্য প্রসেস হচ্ছে…', 50);
     const wdId   = 'WD' + Date.now();
     const wdData = { wdId, userId: String(appState.user.id), userName: appState.user.name || 'User', method, account, amount, chargePct, chargeAmount, finalAmount, status: 'pending', timestamp: Date.now() };
     await db.ref('withdrawals/' + wdId).set(wdData);
@@ -1517,10 +1476,10 @@ async function requestWithdraw() {
     document.getElementById('wd-account').value = '';
     document.getElementById('wd-amount').value  = '';
     updateFeePreview();
-    toast('উত্তোলনের রিকোয়েস্ট পাঠানো হয়েছে!');
+    toast('উত্তোলনের রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!');
     const sym = appState.config.currencySymbol || 'TK';
-    notifyUser(`📤 <b>উত্তোলন রিকোয়েস্ট গ্রহণ!</b>\n💳 Method: <b>${method}</b>\n🏦 Account: <code>${account}</code>\n💰 Requested: <b>${amount} ${sym}</b>\n➖ Charge (${chargePct}%): <b>${chargeAmount} ${sym}</b>\n🎯 Receive: <b>${finalAmount} ${sym}</b>\n📌 Status: ⏳ Pending`);
-    notifyAdmin(`🔔 <b>নতুন উত্তোলন!</b>\n👤 User: <b>${appState.user.name||'User'}</b>\n🆔 ID: <code>${appState.user.id}</code>\n💳 Method: <b>${method}</b>\n🏦 Account: <code>${account}</code>\n💰 Requested: <b>${amount} ${sym}</b>\n➖ Charge (${chargePct}%): <b>${chargeAmount} ${sym}</b>\n🎯 Payable: <b>${finalAmount} ${sym}</b>`);
+    notifyUser(`📤 <b>উত্তোলনের রিকোয়েস্ট গ্রহণ করা হয়েছে!</b>\n━━━━━━━━━━━━━━━\n💳 Method: <b>${method}</b>\n🏦 Account: <code>${account}</code>\n💰 Requested: <b>${amount} ${sym}</b>\n➖ Charge (${chargePct}%): <b>${chargeAmount} ${sym}</b>\n🎯 You Will Receive: <b>${finalAmount} ${sym}</b>\n📌 Status: ⏳ Pending\n💵 অবশিষ্ট ব্যালেন্স: <b>${newBal.toFixed(2)} ${sym}</b>`);
+    notifyAdmin(`🔔 <b>নতুন উত্তোলন রিকোয়েস্ট!</b>\n━━━━━━━━━━━━━━━\n👤 User: <b>${appState.user.name||'User'}</b>\n🆔 ID: <code>${appState.user.id}</code>\n💳 Method: <b>${method}</b>\n🏦 Account: <code>${account}</code>\n💰 Requested: <b>${amount} ${sym}</b>\n➖ Charge (${chargePct}%): <b>${chargeAmount} ${sym}</b>\n🎯 Payable: <b>${finalAmount} ${sym}</b>\n━━━━━━━━━━━━━━━\n✅ Admin Panel থেকে রিভিউ করুন।`);
     startWdHistoryListener();
   } catch(e) {
     hideWdLoading();
@@ -1537,12 +1496,12 @@ function renderSellPage() {
   const sym  = cfg.currencySymbol || 'TK';
   const grid = document.getElementById('sellGrid');
   const items = [
-    { id:'gmail',    modal:'gmailSellModal',    priceEl:'gmailPriceShow',    icon:'<i class="fab fa-google" style="color:#EA4335;font-size:1.7rem;"></i>',    iconBg:'logo-gmail',    label:'Gmail Account',  price:sale.gmailPrice||'—',    enabled:sale.gmailEnabled!==false },
-    { id:'instagram',modal:'instaSellModal',    priceEl:'instaPriceShow',    icon:'<i class="fab fa-instagram" style="color:#fff;font-size:1.7rem;"></i>',    iconBg:'logo-instagram',label:'Instagram ID',   price:sale.instaPrice||'—',    enabled:sale.instaEnabled!==false },
-    { id:'facebook', modal:'fbSellModal',       priceEl:'fbPriceShow',       icon:'<i class="fab fa-facebook" style="color:#1877F2;font-size:1.7rem;"></i>',   iconBg:'logo-facebook', label:'Facebook ID',    price:sale.fbPrice||'—',       enabled:sale.fbEnabled!==false },
-    { id:'tiktok',   modal:'tiktokSellModal',   priceEl:'tiktokPriceShow',   icon:'<i class="fab fa-tiktok" style="color:#fff;font-size:1.7rem;"></i>',        iconBg:'logo-tiktok',   label:'TikTok Account', price:sale.tiktokPrice||'—',   enabled:sale.tiktokEnabled!==false },
-    { id:'telegram', modal:'telegramSellModal', priceEl:'telegramPriceShow', icon:'<i class="fab fa-telegram" style="color:#24A1DE;font-size:1.7rem;"></i>',   iconBg:'logo-telegram', label:'Telegram ID',    price:sale.telegramPrice||'—', enabled:sale.telegramEnabled!==false },
-    { id:'whatsapp', modal:'whatsappSellModal', priceEl:'whatsappPriceShow', icon:'<i class="fab fa-whatsapp" style="color:#25D366;font-size:1.7rem;"></i>',   iconBg:'logo-whatsapp', label:'WhatsApp ID',    price:sale.whatsappPrice||'—', enabled:sale.whatsappEnabled!==false }
+    { id:'gmail',    modal:'gmailSellModal',    priceEl:'gmailPriceShow',    icon:'<i class="fab fa-google" style="color:#EA4335;font-size:1.7rem;"></i>',    iconBg:'logo-gmail',    label:'Gmail Account',    price:sale.gmailPrice||'—',    enabled:sale.gmailEnabled!==false },
+    { id:'instagram',modal:'instaSellModal',    priceEl:'instaPriceShow',    icon:'<i class="fab fa-instagram" style="color:#fff;font-size:1.7rem;"></i>',    iconBg:'logo-instagram',label:'Instagram ID',     price:sale.instaPrice||'—',    enabled:sale.instaEnabled!==false },
+    { id:'facebook', modal:'fbSellModal',       priceEl:'fbPriceShow',       icon:'<i class="fab fa-facebook" style="color:#1877F2;font-size:1.7rem;"></i>',   iconBg:'logo-facebook', label:'Facebook ID',      price:sale.fbPrice||'—',       enabled:sale.fbEnabled!==false },
+    { id:'tiktok',   modal:'tiktokSellModal',   priceEl:'tiktokPriceShow',   icon:'<i class="fab fa-tiktok" style="color:#fff;font-size:1.7rem;"></i>',        iconBg:'logo-tiktok',   label:'TikTok Account',   price:sale.tiktokPrice||'—',   enabled:sale.tiktokEnabled!==false },
+    { id:'telegram', modal:'telegramSellModal', priceEl:'telegramPriceShow', icon:'<i class="fab fa-telegram" style="color:#24A1DE;font-size:1.7rem;"></i>',   iconBg:'logo-telegram', label:'Telegram ID',      price:sale.telegramPrice||'—', enabled:sale.telegramEnabled!==false },
+    { id:'whatsapp', modal:'whatsappSellModal', priceEl:'whatsappPriceShow', icon:'<i class="fab fa-whatsapp" style="color:#25D366;font-size:1.7rem;"></i>',   iconBg:'logo-whatsapp', label:'WhatsApp ID',      price:sale.whatsappPrice||'—', enabled:sale.whatsappEnabled!==false }
   ];
   let html = '';
   items.forEach(item => {
@@ -1569,7 +1528,8 @@ async function notifyAdminOfSell(type, userName, userId, data) {
   const typeLabels = { gmail:'Gmail 📧', instagram:'Instagram 📸', facebook:'Facebook 👥', tiktok:'TikTok 🎵', telegram:'Telegram ✈️', whatsapp:'WhatsApp 💚' };
   let detailLines = '';
   Object.keys(data).forEach(k => { if (k !== 'type') detailLines += `\n• ${k}: <code>${data[k]||'—'}</code>`; });
-  await notifyAdmin(`🔔 <b>নতুন Sell সাবমিশন!</b>\nটাইপ: <b>${typeLabels[type]||type}</b>\n👤 ইউজার: <b>${userName}</b>\n🆔 ID: <code>${userId}</code>${detailLines}`);
+  const msg = `🔔 <b>নতুন Sell সাবমিশন!</b>\n━━━━━━━━━━━━━━━\nটাইপ: <b>${typeLabels[type]||type}</b>\n👤 ইউজার: <b>${userName}</b>\n🆔 User ID: <code>${userId}</code>${detailLines}\n━━━━━━━━━━━━━━━\n✅ রিভিউ করে বটে ব্যালেন্স যোগ করুন।`;
+  await notifyAdmin(msg);
 }
 
 async function submitSellItem(type) {
@@ -1613,85 +1573,84 @@ async function submitSellItem(type) {
   const subId = 'SELL_' + Date.now();
   await db.ref('sellSubmissions/' + subId).set({ ...data, userId: String(tgUser.id), userName: tgUser.first_name, status:'pending', timestamp: Date.now() });
   toast('✅ সাবমিট হয়েছে! অ্যাডমিন রিভিউ করবেন।');
-  notifyUser(`🛒 <b>Sell রিকোয়েস্ট গ্রহণ!</b>\n📦 টাইপ: <b>${type}</b>\n📌 Status: ⏳ Pending Review`);
+  const typeLabels = { gmail:'Gmail', instagram:'Instagram', facebook:'Facebook', tiktok:'TikTok', telegram:'Telegram', whatsapp:'WhatsApp' };
+  notifyUser(`🛒 <b>আপনার Sell রিকোয়েস্ট গ্রহণ করা হয়েছে!</b>\n━━━━━━━━━━━━━━━\n📦 টাইপ: <b>${typeLabels[type]||type}</b>\n📌 Status: ⏳ Pending Review\n━━━━━━━━━━━━━━━\n⏳ অ্যাডমিন রিভিউ করবেন। যাচাই হলে ব্যালেন্স যোগ হবে। ধন্যবাদ! 🙏`);
   notifyAdminOfSell(type, tgUser.first_name, tgUser.id, data);
 }
 
 /* ============================================================
    ══════════════════════════════════════════════════════════
-   AD ENGINE — সম্পূর্ণ ঠিক করা হয়েছে
-   
-   মূল পরিবর্তন:
-   1. Adsgram: প্রতিবার নতুন controller init করা হয় (cache নয়)
-      → "There are currently no ads" এই error ঠিক হয়েছে
-   2. Monetag: সঠিক SDK URL ও proper polling দিয়ে load করা হয়
-      → Monetag এখন সঠিকভাবে কাজ করবে
-   3. GigaPub + TADS: proper fallback সহ
+   AD ENGINE — FIXED VERSION
+   Adsgram: "no ads" error gracefully handle করে
+   Monetag: SDK ready হওয়া পর্যন্ত পোল করে
+   GigaPub: multiple method names সাপোর্ট করে
    ══════════════════════════════════════════════════════════
 ============================================================ */
 
-/* --- Monetag loaded zone tracker --- */
-const _monetagSDKLoaded = {};
+/* --- Adsgram Controller Cache --- */
+const _adsgramControllers = {};
 
-/**
- * Monetag SDK load করে।
- * Monetag-এর official SDK tag format:
- *   <script src="//libtl.com/sdk.js" data-zone="ZONE_ID" data-sdk="show_ZONE_ID"></script>
- */
+function getAdsgramController(blockId) {
+  if (_adsgramControllers[blockId]) return _adsgramControllers[blockId];
+  if (!window.Adsgram) return null;
+  try {
+    const ctrl = window.Adsgram.init({ blockId: String(blockId) });
+    _adsgramControllers[blockId] = ctrl;
+    return ctrl;
+  } catch(e) { return null; }
+}
+
+/* --- Monetag SDK Loader --- */
+const _monetagLoaded = {};
+
 function loadMonetagSDK(zoneId) {
   return new Promise((resolve) => {
     const fnName = 'show_' + zoneId;
-
-    // ইতিমধ্যে function তৈরি হয়ে গেলে সরাসরি resolve
+    // ইতিমধ্যে function আছে — সরাসরি resolve
     if (typeof window[fnName] === 'function') { resolve(); return; }
-
-    // ইতিমধ্যে loading শুরু হয়ে থাকলে poll করো
-    if (_monetagSDKLoaded[zoneId]) {
-      let attempts = 0;
-      const poll = setInterval(() => {
-        attempts++;
-        if (typeof window[fnName] === 'function') { clearInterval(poll); resolve(); return; }
-        if (attempts > 60) { clearInterval(poll); resolve(); }
+    // ইতিমধ্যে script যোগ করা হয়েছে — পোল করো
+    if (_monetagLoaded[zoneId]) {
+      let att = 0;
+      const p = setInterval(() => {
+        att++;
+        if (typeof window[fnName] === 'function' || att > 50) { clearInterval(p); resolve(); }
       }, 200);
       return;
     }
-
-    _monetagSDKLoaded[zoneId] = true;
-
-    // Script tag তৈরি করো
+    _monetagLoaded[zoneId] = true;
+    // Script ডায়নামিক লোড
     const sc = document.createElement('script');
     sc.src = '//libtl.com/sdk.js';
     sc.setAttribute('data-zone', String(zoneId));
     sc.setAttribute('data-sdk', fnName);
-    sc.setAttribute('data-ad-host', 'host-fill.com');
     sc.onload = () => {
-      // SDK load হওয়ার পরে function ready হতে একটু সময় লাগে
-      let attempts = 0;
-      const poll = setInterval(() => {
-        attempts++;
-        if (typeof window[fnName] === 'function') { clearInterval(poll); resolve(); return; }
-        if (attempts > 40) { clearInterval(poll); resolve(); }
+      // SDK init হতে একটু সময় লাগে, পোল করো
+      let att = 0;
+      const p = setInterval(() => {
+        att++;
+        if (typeof window[fnName] === 'function' || att > 40) { clearInterval(p); resolve(); }
       }, 250);
     };
-    sc.onerror = () => { resolve(); };
+    sc.onerror = () => resolve();
     document.head.appendChild(sc);
   });
 }
 
-/**
- * GigaPub SDK loader
- */
+/* --- GigaPub SDK Loader --- */
 const _gigapubState = { loaded: false, loading: false };
 
 function loadGigaPubSDK(appId) {
   return new Promise((resolve) => {
-    if (window.showGiga || (window.TelegramGiga && window.TelegramGiga.show)) { resolve(); return; }
+    // ইতিমধ্যে কোনো show function আছে
+    if (window.showGiga || (window.TelegramGiga && window.TelegramGiga.show) || (window.GigaPub && window.GigaPub.show)) {
+      resolve(); return;
+    }
     if (_gigapubState.loaded) { resolve(); return; }
     if (_gigapubState.loading) {
       let att = 0;
       const p = setInterval(() => {
         att++;
-        if (window.showGiga || _gigapubState.loaded || att > 40) { clearInterval(p); resolve(); }
+        if (window.showGiga || _gigapubState.loaded || att > 30) { clearInterval(p); resolve(); }
       }, 250);
       return;
     }
@@ -1704,26 +1663,13 @@ function loadGigaPubSDK(appId) {
   });
 }
 
-/**
- * ══════════════════════════════════════════════
- * showOneAd(slotIdx) — মূল ad দেখানোর function
- *
- * ADSGRAM FIX:
- * ● প্রতিবার নতুন Adsgram.init() call করা হয়
- * ● Controller cache করা হয় না
- * ● এতে "There are currently no ads" error আসে না
- *
- * MONETAG FIX:
- * ● SDK dynamically load করা হয়
- * ● show_ZONEID() function poll করে পাওয়া যায়
- * ══════════════════════════════════════════════
- */
+/* --- Main Ad Show Function --- */
 async function showOneAd(slotIdx) {
   return new Promise(async (resolve, reject) => {
     const cfg  = appState.config;
     const slot = (cfg.adSlots || [])[slotIdx];
 
-    // slot না থাকলে বা disabled হলে reward দিয়ে skip
+    // slot নেই বা disabled — reward দিয়ে continue
     if (!slot || !slot.id || !slot.network || slot.network === 'none' || slot.network === '') {
       resolve(); return;
     }
@@ -1731,156 +1677,145 @@ async function showOneAd(slotIdx) {
     const net = (slot.network || '').toLowerCase().trim();
     const id  = String(slot.id).trim();
 
-    /* ────────────── ADSGRAM (FIXED) ────────────── */
+    /* ──────── ADSGRAM ──────── */
     if (net === 'adsgram') {
+      // Adsgram SDK লোড হওয়ার জন্য অপেক্ষা করো (max 4s)
+      if (!window.Adsgram) {
+        let waited = 0;
+        await new Promise(r => {
+          const poll = setInterval(() => {
+            waited += 200;
+            if (window.Adsgram || waited >= 4000) { clearInterval(poll); r(); }
+          }, 200);
+        });
+      }
+
+      if (!window.Adsgram) {
+        // SDK লোড হয়নি — reward দিয়ে continue
+        resolve(); return;
+      }
+
       try {
-        // Adsgram SDK load হওয়ার জন্য অপেক্ষা করো
-        if (!window.Adsgram) {
-          let waitCount = 0;
-          await new Promise(r => {
-            const p = setInterval(() => {
-              waitCount++;
-              if (window.Adsgram || waitCount > 30) { clearInterval(p); r(); }
-            }, 300);
-          });
-        }
+        const ctrl = getAdsgramController(id);
+        if (!ctrl) { resolve(); return; }
 
-        if (!window.Adsgram) {
-          // SDK পাওয়া যায়নি, reward দিয়ে continue
-          resolve(); return;
-        }
-
-        // ★★★ KEY FIX: প্রতিবার নতুন controller তৈরি করো
-        // Cache করা controller-এই "no ads" error আসে
-        const controller = window.Adsgram.init({ blockId: id });
-
-        if (!controller || typeof controller.show !== 'function') {
-          resolve(); return;
-        }
-
-        controller.show()
-          .then(() => {
+        ctrl.show()
+          .then((result) => {
+            // result.done = true মানে ad সম্পন্ন হয়েছে
             resolve();
           })
           .catch((result) => {
-            // Adsgram error object চেক করো
-            // done=true মানে ad সম্পূর্ণ দেখা হয়েছে (reward দাও)
-            if (result && result.done === true) {
+            // result.error = true এবং result.description দেখে সিদ্ধান্ত নাও
+            // "There are currently no ads to display" — এটা user এর দোষ না
+            // তাই reward দিয়ে continue করো (reject করো না)
+            const desc = (result && result.description) ? String(result.description).toLowerCase() : '';
+            const isNoAds = desc.includes('no ads') || desc.includes('no ad') || desc.includes('currently no');
+            if (isNoAds) {
+              // কোনো ad নেই — reward দেওয়া যাবে
               resolve();
-            } else if (result && result.error === true) {
-              // "no ads" বা অন্য error — reward skip করো
-              reject(new Error("Ad Closed or Cancelled"));
             } else {
-              // ইউজার বন্ধ করেছে
+              // User cancel করেছে বা অন্য error
               reject(new Error("Ad Closed or Cancelled"));
             }
           });
-
       } catch(e) {
-        // যেকোনো unexpected error হলে gracefully resolve করো
-        resolve();
+        resolve(); // unexpected error — reward দিয়ে continue
       }
       return;
     }
 
-    /* ────────────── MONETAG (FIXED) ────────────── */
+    /* ──────── MONETAG ──────── */
     if (net === 'monetag') {
       try {
-        // SDK load করো (যদি আগে না হয়ে থাকে)
+        // SDK লোড করো এবং function ready হওয়া পর্যন্ত অপেক্ষা করো
         await loadMonetagSDK(id);
-
-        const fnName = 'show_' + id;
-        const fn = window[fnName];
-
+        const fn = window['show_' + id];
         if (typeof fn !== 'function') {
-          // SDK load হয়নি বা function নেই, reward দিয়ে continue
+          // Function এখনো তৈরি হয়নি — reward দিয়ে continue
           resolve(); return;
         }
-
-        // Monetag show call করো
-        const result = fn();
-
-        // result একটি Promise হতে পারে বা নাও হতে পারে
-        if (result && typeof result.then === 'function') {
-          result
-            .then(() => resolve())
-            .catch(() => reject(new Error("Ad Closed or Cancelled")));
-        } else {
-          // Promise না হলে সরাসরি resolve
-          resolve();
-        }
-
+        fn()
+          .then(() => resolve())
+          .catch(() => reject(new Error("Ad Closed or Cancelled")));
       } catch(e) {
         resolve();
       }
       return;
     }
 
-    /* ────────────── GIGAPUB ────────────── */
+    /* ──────── GIGAPUB ──────── */
     if (net === 'gigapub') {
       try {
         await loadGigaPubSDK(id);
+        // GigaPub বিভিন্ন method নামে expose করে
         const showFn =
-          (window.showGiga && typeof window.showGiga === 'function' ? window.showGiga : null) ||
-          (window.TelegramGiga && typeof window.TelegramGiga.show === 'function' ? () => window.TelegramGiga.show() : null) ||
-          (window.GigaPub && typeof window.GigaPub.show === 'function' ? () => window.GigaPub.show() : null);
+          (typeof window.showGiga === 'function' ? (() => window.showGiga()) : null) ||
+          (window.TelegramGiga && typeof window.TelegramGiga.show === 'function' ? (() => window.TelegramGiga.show()) : null) ||
+          (window.GigaPub && typeof window.GigaPub.show === 'function' ? (() => window.GigaPub.show()) : null);
 
         if (!showFn) { resolve(); return; }
-
-        const r = showFn();
-        if (r && typeof r.then === 'function') {
-          r.then(() => resolve()).catch(() => reject(new Error("Ad Closed or Cancelled")));
-        } else {
-          resolve();
-        }
+        showFn()
+          .then(() => resolve())
+          .catch(() => reject(new Error("Ad Closed or Cancelled")));
       } catch(e) {
         resolve();
       }
       return;
     }
 
-    /* ────────────── TADS ────────────── */
+    /* ──────── TADS ──────── */
     if (net === 'tads') {
       try {
         if (!window.TADS) {
           const sc = document.createElement('script');
           sc.src = 'https://cdn.tads.me/sdk.js';
+          sc.setAttribute('data-zone', id);
           await new Promise(r => { sc.onload = r; sc.onerror = r; document.head.appendChild(sc); });
         }
-        const showFn = window.TADS && typeof window.TADS.show === 'function'
-          ? () => window.TADS.show({ zone: id })
-          : null;
+        const showFn =
+          (window.TADS && typeof window.TADS.show === 'function' ? (() => window.TADS.show({ zone: id })) : null) ||
+          (typeof window['tads_show'] === 'function' ? (() => window['tads_show'](id)) : null);
         if (!showFn) { resolve(); return; }
-        const r = showFn();
-        if (r && typeof r.then === 'function') {
-          r.then(() => resolve()).catch(() => reject(new Error("Ad Closed or Cancelled")));
-        } else {
-          resolve();
-        }
+        showFn()
+          .then(() => resolve())
+          .catch(() => reject(new Error("Ad Closed or Cancelled")));
       } catch(e) {
         resolve();
       }
       return;
     }
 
-    /* ────────────── অজানা network ────────────── */
+    /* ──────── UNKNOWN NETWORK ──────── */
     resolve();
   });
 }
 
-/* --- Preload ads when config loads --- */
+/* --- Preload Ads --- */
 function preloadAds() {
-  const cfg   = appState.config;
-  const slots = cfg.adSlots || [];
-  slots.forEach((slot) => {
+  const slots = appState.config.adSlots || [];
+  slots.forEach(slot => {
     if (!slot || !slot.id || !slot.network || slot.network === 'none') return;
     const net = (slot.network || '').toLowerCase().trim();
     const id  = String(slot.id).trim();
-    // Monetag SDK আগে থেকে load করে রাখো
+    // Adsgram: SDK ready হলে preload করো
+    if (net === 'adsgram') {
+      if (window.Adsgram) {
+        try { getAdsgramController(id); } catch(e) {}
+      } else {
+        // SDK load এর জন্য অপেক্ষা করো তারপর preload
+        const waitAndLoad = setInterval(() => {
+          if (window.Adsgram) {
+            clearInterval(waitAndLoad);
+            try { getAdsgramController(id); } catch(e) {}
+          }
+        }, 500);
+        setTimeout(() => clearInterval(waitAndLoad), 10000);
+      }
+    }
+    // Monetag: SDK preload করো
     if (net === 'monetag') { loadMonetagSDK(id); }
-    // GigaPub SDK আগে থেকে load করে রাখো
+    // GigaPub: SDK preload করো
     if (net === 'gigapub') { loadGigaPubSDK(id); }
-    // Adsgram: প্রতিবার নতুন init করতে হয়, তাই preload করা হয় না
   });
 }
 
@@ -1898,17 +1833,17 @@ function renderAds() {
   let html = '';
   let rendered = 0;
   slots.forEach((slot, i) => {
-    if (!slot || !slot.id || slot.network === 'none') return;
+    if (!slot || !slot.id || slot.network === 'none' || slot.network === '') return;
     rendered++;
     const watchedToday = Number(
       (appState.user.dailyAds && appState.user.dailyAds[today] && appState.user.dailyAds[today]['slot_' + i]) || 0
     );
     const isDone  = watchedToday >= limit;
-    const netLabels = { adsgram:'Adsgram', monetag:'Monetag', gigapub:'GigaPub', tads:'TADS' };
-    const netLabel  = netLabels[(slot.network||'').toLowerCase()] || slot.network;
+    const netMap  = { adsgram:'Adsgram', monetag:'Monetag', gigapub:'GigaPub', tads:'TADS' };
+    const netLabel= netMap[(slot.network||'').toLowerCase()] || slot.network;
     const colors  = ['#7C5CFF,#A78BFA', '#12B886,#22E0A1', '#FF6FB5,#FF8A6B', '#2DD4FF,#4D8BFF'];
     const iconCls = ['fa-film', 'fa-photo-video', 'fa-play-circle', 'fa-ad'];
-    html += `<div class="ad-card ${isDone ? 'daily-done' : ''}" onclick="${isDone ? '' : 'watchAd(' + i + ')'}">
+    html += `<div class="ad-card ${isDone ? 'daily-done' : ''}" onclick="watchAd(${i})">
       <div class="ad-icon" style="background:linear-gradient(135deg,${colors[i % 4]});"><i class="fas ${iconCls[i % 4]}" style="color:#fff;"></i></div>
       <h4>Ad ${i + 1}</h4>
       <p>${netLabel}</p>
@@ -1928,25 +1863,22 @@ async function watchAd(slotIdx) {
     (appState.user.dailyAds && appState.user.dailyAds[today] && appState.user.dailyAds[today]['slot_' + slotIdx]) || 0
   );
   if (watchedToday >= limit) return toast('আজকের জন্য এই অ্যাডের লিমিট শেষ!');
-  if (!slot || !slot.id || slot.network === 'none') return toast('এই অ্যাড স্লট সক্রিয় নেই।');
-
+  if (!slot || !slot.id || slot.network === 'none' || slot.network === '') return toast('এই অ্যাড স্লট সক্রিয় নেই।');
   try {
     await showOneAd(slotIdx);
-    // ad সফলভাবে দেখা হয়েছে — reward দাও
     const reward  = Number(cfg.adReward || 0.5);
     const sym     = cfg.currencySymbol || 'TK';
     const newBal  = (appState.user.balance || 0) + reward;
     const newEarn = (appState.user.totalEarned || 0) + reward;
     const newCount= watchedToday + 1;
     await db.ref('users/' + appState.user.id).update({
-      balance:     newBal,
+      balance:    newBal,
       totalEarned: newEarn,
       ['dailyAds/' + today + '/slot_' + slotIdx]: newCount
     });
     toast('+' + reward + ' ' + sym + ' যোগ হয়েছে!');
   } catch(e) {
-    // ad বন্ধ করা হয়েছে বা error — reward দেওয়া হবে না
-    toast('অ্যাড সম্পূর্ণ দেখুন, তারপর পুরস্কার পাবেন।');
+    toast('অ্যাড সম্পূর্ণ না দেখলে পুরস্কার পাবেন না');
   }
 }
 
@@ -1987,7 +1919,7 @@ async function doTask(taskId, url, reward) {
     balance: newBal, totalEarned: newEarn, ['taskHistory/' + taskId]: Date.now()
   });
   toast('+' + reward + ' ' + sym + ' টাস্ক সম্পন্ন!');
-  notifyUser(`✅ <b>টাস্ক সম্পন্ন!</b>\n💰 রিওয়ার্ড: <b>+${reward} ${sym}</b>\n💳 ব্যালেন্স: <b>${newBal.toFixed(2)} ${sym}</b>`);
+  notifyUser(`✅ <b>টাস্ক সম্পন্ন হয়েছে!</b>\n━━━━━━━━━━━━━━━\n💰 রিওয়ার্ড: <b>+${reward} ${sym}</b>\n💳 নতুন ব্যালেন্স: <b>${newBal.toFixed(2)} ${sym}</b>`);
 }
 
 /* ============================================================
@@ -2023,7 +1955,7 @@ async function claimRefTask(taskId, reward) {
   const newEarn = (appState.user.totalEarned || 0) + Number(reward);
   await db.ref('users/' + appState.user.id).update({ balance: newBal, totalEarned: newEarn, ['claimedRefTasks/' + taskId]: true });
   toast('🎉 +' + reward + ' ' + sym + ' Referral reward claimed!');
-  notifyUser(`🏆 <b>রেফারেল টার্গেট পূরণ!</b>\n💰 রিওয়ার্ড: <b>+${reward} ${sym}</b>`);
+  notifyUser(`🏆 <b>রেফারেল টার্গেট পূরণ হয়েছে!</b>\n💰 রিওয়ার্ড: <b>+${reward} ${sym}</b>`);
 }
 
 /* ============================================================
@@ -2060,7 +1992,7 @@ async function loadLeaderboard() {
       </div>`;
     }
   });
-  podiumEl.innerHTML    = top3 || '<div style="text-align:center;padding:24px;color:var(--text-muted);flex:1;"><i class="fas fa-trophy" style="font-size:1.6rem;opacity:.4;"></i><p style="margin-top:8px;font-size:.85rem;">কোনো ডেটা নেই</p></div>';
+  podiumEl.innerHTML    = top3 || '<div style="text-align:center;padding:24px;color:var(--text-muted);flex:1;"><i class="fas fa-trophy" style="font-size:1.6rem;opacity:.4;"></i><p style="margin-top:8px;font-size:.85rem;font-weight:600;">কোনো ডেটা পাওয়া যায়নি</p></div>';
   secondaryEl.innerHTML = second;
   listEl.innerHTML      = listHtml;
 }
@@ -2199,7 +2131,6 @@ window.onload = () => {
   document.getElementById('u-id').innerText   = 'ID: ' + tgUser.id;
   if (tgUser.photo_url) document.getElementById('u-img').src = tgUser.photo_url;
 
-  // Config real-time listener
   db.ref('config').on('value', snap => {
     if (snap.exists()) {
       appState.config = snap.val();
@@ -2220,12 +2151,11 @@ window.onload = () => {
         id: tgUser.id, name: tgUser.first_name, photo: tgUser.photo_url || '',
         balance: 0, totalEarned: 0, referrals: 0, dailyAds: {}, taskHistory: {},
         lastActive: today, dailyBonusDate: '', totalWithdrawn: 0, totalAdsWatched: 0,
-        isBanned: !deviceOk, banReason: deviceOk ? '' : 'Multiple accounts detected.'
+        isBanned: !deviceOk, banReason: deviceOk ? '' : 'Multiple accounts detected. Max 3 accounts per device.'
       };
       await userRef.set(newUser);
       if (!deviceOk) { showBanScreen(newUser.banReason); return; }
 
-      // Referral bonus
       let refBy = (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) ? tg.initDataUnsafe.start_param : null;
       if (!refBy) { const urlParams = new URLSearchParams(window.location.search); refBy = urlParams.get('tgWebAppStartParam') || urlParams.get('startapp'); }
       if (refBy && String(refBy) !== String(tgUser.id)) {
@@ -2243,7 +2173,7 @@ window.onload = () => {
               await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
                 method:'POST', headers:{'Content-Type':'application/json'},
                 body: JSON.stringify({ chat_id: String(refBy), parse_mode:'HTML',
-                  text: `🎉 <b>নতুন রেফারেল!</b>\n👤 নতুন সদস্য: <b>${tgUser.first_name}</b>\n💰 বোনাস: <b>+${rBonus} ${sym}</b>\n👥 মোট রেফারেল: <b>${newRefCount}</b>` })
+                  text: `🎉 <b>নতুন রেফারেল যোগ হয়েছে!</b>\n━━━━━━━━━━━━━━━\n👤 নতুন সদস্য: <b>${tgUser.first_name}</b>\n💰 রেফার বোনাস: <b>+${rBonus} ${sym}</b>\n👥 মোট রেফারেল: <b>${newRefCount}</b>\n━━━━━━━━━━━━━━━\n🔥 আরও বন্ধু রেফার করুন!` })
               });
             } catch(e) {}
           }
@@ -2257,7 +2187,7 @@ window.onload = () => {
     userRef.on('value', async liveSnap => {
       if (liveSnap.exists()) {
         appState.user = liveSnap.val();
-        if (appState.user.isBanned) { showBanScreen(appState.user.banReason || 'Account suspended.'); return; }
+        if (appState.user.isBanned) { showBanScreen(appState.user.banReason || 'Your account has been suspended.'); return; }
         if (!appState.user.dailyAds)    appState.user.dailyAds = {};
         if (!appState.user.taskHistory) appState.user.taskHistory = {};
         if (appState.user.lastActive !== today) {
