@@ -1027,8 +1027,7 @@ function toast(msg) {
 function todayStr() { return new Date().toISOString().slice(0, 10); }
 
 /* ============================================================
-   WITHDRAW CHARGE — DEFAULT 30% (admin can override via config)
-   Key priority: withdrawCharge → withdrawFee → withdrawChargePercent → 30
+   WITHDRAW CHARGE
 ============================================================ */
 function getWithdrawChargePct() {
   const c = appState.config;
@@ -1036,7 +1035,7 @@ function getWithdrawChargePct() {
   if (v === undefined || v === null || v === '') v = c.withdrawFee;
   if (v === undefined || v === null || v === '') v = c.withdrawChargePercent;
   v = Number(v);
-  if (isNaN(v) || v < 0) v = 30;   // ← DEFAULT 30%
+  if (isNaN(v) || v < 0) v = 30;
   if (v > 100) v = 100;
   return v;
 }
@@ -1326,8 +1325,8 @@ async function submitWithdraw() { closeWdConfirm(); await requestWithdraw(); }
 ============================================================ */
 function showBonus() {
   const today = todayStr();
-  const cfg   = appState.config;
   if (appState.user.dailyBonusDate === today) return;
+  const cfg           = appState.config;
   const bonusAmt      = Number(cfg.dailyBonusAmount || 20);
   const bonusAdCount  = Number(cfg.bonusAdCount || 2);
   document.getElementById('bonusAmt').innerText    = bonusAmt;
@@ -1346,11 +1345,23 @@ async function claimDailyBonus() {
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> অ্যাড লোড হচ্ছে…';
   const bonusAdCount = Number(appState.config.bonusAdCount || 2);
   const amt = Number(appState.config.dailyBonusAmount || 20);
+  let adsWatched = 0;
   try {
-    for (let i = 1; i <= bonusAdCount; i++) {
-      subText.innerText = `অ্যাড ${i}/${bonusAdCount} দেখছেন… একটু অপেক্ষা করুন`;
-      await showOneAd(i - 1);
+    for (let i = 0; i < bonusAdCount; i++) {
+      subText.innerText = `অ্যাড ${i + 1}/${bonusAdCount} দেখছেন… একটু অপেক্ষা করুন`;
+      const result = await showOneAd(i);
+      // result.success = true মানে ad দেখা হয়েছে বা gracefully skip হয়েছে
+      // result.userCancelled = true মানে user নিজে বন্ধ করেছে
+      if (result.userCancelled) {
+        toast('অ্যাডটি সম্পূর্ণ দেখুন, মাঝপথে বন্ধ করলে বোনাস পাবেন না।');
+        subText.innerText = 'অ্যাড না দেখলে বা কেটে দিলে বোনাস বাতিল হবে। আবার চেষ্টা করুন।';
+        btn.disabled = false; btnCancel.disabled = false;
+        btn.innerHTML = '<i class="fas fa-play-circle"></i> Watch Ads &amp; Claim';
+        return;
+      }
+      adsWatched++;
     }
+    // সব অ্যাড দেখা হয়েছে (বা gracefully bypass হয়েছে)
     const newBal  = (appState.user.balance || 0) + amt;
     const newEarn = (appState.user.totalEarned || 0) + amt;
     await db.ref('users/' + appState.user.id).update({ balance: newBal, totalEarned: newEarn, dailyBonusDate: today });
@@ -1359,10 +1370,8 @@ async function claimDailyBonus() {
     const sym = appState.config.currencySymbol || 'TK';
     notifyUser(`🎁 <b>ডেইলি বোনাস ক্লেইম সফল!</b>\n━━━━━━━━━━━━━━━\n💰 বোনাস: <b>+${amt} ${sym}</b>\n💳 নতুন ব্যালেন্স: <b>${newBal.toFixed(2)} ${sym}</b>\n━━━━━━━━━━━━━━━\n🔥 দারুণ! প্রতিদিন লগইন করে বোনাস নিন!`);
   } catch(e) {
-    toast(e.message === "Ad Closed or Cancelled"
-      ? "অ্যাডটি সম্পূর্ণ দেখেননি, বোনাস বাতিল।"
-      : "অ্যাড লোড হতে সমস্যা হয়েছে, আবার চেষ্টা করুন।");
-    subText.innerText = "অ্যাড না দেখলে বা কেটে দিলে বোনাস বাতিল হবে। আবার চেষ্টা করুন।";
+    toast('অ্যাড লোড হতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+    subText.innerText = 'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।';
   } finally {
     btn.disabled = false; btnCancel.disabled = false;
     btn.innerHTML = '<i class="fas fa-play-circle"></i> Watch Ads &amp; Claim';
@@ -1637,79 +1646,91 @@ async function submitSellItem(type) {
 
 /* ============================================================
    ══════════════════════════════════════════════════════════
-   AD ENGINE — সম্পূর্ণ নতুন, সব নেটওয়ার্ক সাপোর্ট করে
-   Firebase config থেকে network+id পড়ে dynamic SDK লোড করে
-   Adsgram / Monetag / GigaPub / TADS / Custom সব চলবে
+   AD ENGINE — FIXED VERSION
+   
+   মূল পরিবর্তন:
+   1. showOneAd() এখন { success, userCancelled } object return করে
+   2. Adsgram "no ads" error = success:true, userCancelled:false (reward দাও)
+   3. Adsgram user cancel = success:false, userCancelled:true (reward দিও না)
+   4. Monetag কাজ করলে reward, না করলেও graceful fallback
+   5. Controller cache বাদ দিয়ে প্রতিবার নতুন init (Adsgram docs অনুযায়ী)
    ══════════════════════════════════════════════════════════
 ============================================================ */
 
-/* --- Monetag SDK dynamic loader cache --- */
-const monetagLoadedZones = {};
+/* --- Adsgram error classification --- */
+// Adsgram reject এ result object আসে:
+// { done: false, error: true, description: "...", state: "..." }
+// "no ads" = error:true কিন্তু user cancel নয়
+// user close = error:false, done:false (interstitial) বা reject with specific description
+function isAdsgramUserCancelled(result) {
+  if (!result) return false;
+  // user নিজে বন্ধ করলে description-এ "cancel" বা "skip" থাকে
+  // error:true মানে technical error (no ads, network etc) — reward দাও
+  if (result.error === true) return false; // technical error → not user cancelled
+  // done:false এবং error:false মানে user skip করেছে
+  if (result.done === false && result.error === false) return true;
+  return false;
+}
 
-/**
- * Monetag SDK dynamically load করে zone-এর জন্য।
- * SDK লোড হলে window["show_ZONEID"] ফাংশন তৈরি হয়।
- */
+/* --- Adsgram controller: প্রতিটি show-এর আগে fresh init --- */
+function createAdsgramController(blockId) {
+  if (!window.Adsgram) return null;
+  try {
+    // Adsgram docs: same blockId → same controller returned (internally cached)
+    return window.Adsgram.init({ blockId: String(blockId) });
+  } catch(e) {
+    console.warn('[Adsgram] init error:', e);
+    return null;
+  }
+}
+
+/* --- Adsgram SDK ready check with retry --- */
+function waitForAdsgram(maxWaitMs = 5000) {
+  return new Promise((resolve) => {
+    if (window.Adsgram) { resolve(true); return; }
+    const started = Date.now();
+    const check = setInterval(() => {
+      if (window.Adsgram) { clearInterval(check); resolve(true); return; }
+      if (Date.now() - started > maxWaitMs) { clearInterval(check); resolve(false); }
+    }, 200);
+  });
+}
+
+/* --- Monetag SDK loader (unchanged, works fine) --- */
+const monetagLoadedZones = {};
 function loadMonetagSDK(zoneId) {
   return new Promise((resolve) => {
     const fnName = 'show_' + zoneId;
-    // ইতিমধ্যে লোড হয়ে গেলে সরাসরি resolve
     if (typeof window[fnName] === 'function') { resolve(); return; }
     if (monetagLoadedZones[zoneId]) {
-      // লোড হচ্ছে, পোল করো
       let attempts = 0;
       const poll = setInterval(() => {
         attempts++;
-        if (typeof window[fnName] === 'function' || attempts > 40) {
-          clearInterval(poll); resolve();
-        }
+        if (typeof window[fnName] === 'function' || attempts > 40) { clearInterval(poll); resolve(); }
       }, 250);
       return;
     }
     monetagLoadedZones[zoneId] = true;
-    // Monetag অফিশিয়াল SDK ট্যাগ
     const sc = document.createElement('script');
     sc.src = 'https://cdn.monetag.com/sdk.min.js';
     sc.setAttribute('data-zone', String(zoneId));
     sc.setAttribute('data-sdk', fnName);
     sc.onload = () => {
-      // SDK ইনিশিয়ালাইজ হতে একটু সময় নেয়
       let attempts = 0;
       const poll = setInterval(() => {
         attempts++;
-        if (typeof window[fnName] === 'function' || attempts > 30) {
-          clearInterval(poll); resolve();
-        }
+        if (typeof window[fnName] === 'function' || attempts > 30) { clearInterval(poll); resolve(); }
       }, 200);
     };
-    sc.onerror = () => resolve(); // error হলেও continue
+    sc.onerror = () => resolve();
     document.head.appendChild(sc);
   });
 }
 
-/**
- * Adsgram AdController cache — একই blockId-এর জন্য একবারই init করে
- */
-const adsgramControllers = {};
-
-function getAdsgramController(blockId) {
-  if (adsgramControllers[blockId]) return adsgramControllers[blockId];
-  if (!window.Adsgram) return null;
-  try {
-    const ctrl = window.Adsgram.init({ blockId: String(blockId) });
-    adsgramControllers[blockId] = ctrl;
-    return ctrl;
-  } catch(e) { return null; }
-}
-
-/**
- * GigaPub SDK loader
- */
+/* --- GigaPub SDK loader --- */
 const gigapubLoaded = { done: false, loading: false };
-
 function loadGigaPubSDK(appId) {
   return new Promise((resolve) => {
-    // যদি ইতিমধ্যে কাজ করছে
     if (window.showGiga || (window.TelegramGiga && window.TelegramGiga.show)) { resolve(); return; }
     if (gigapubLoaded.done) { resolve(); return; }
     if (gigapubLoaded.loading) {
@@ -1721,24 +1742,18 @@ function loadGigaPubSDK(appId) {
       return;
     }
     gigapubLoaded.loading = true;
-    // GigaPub official SDK (app-id দিয়ে লোড)
     const sc = document.createElement('script');
-    sc.src = appId
-      ? `https://sdk.gigapub.net/sdk.js?appId=${appId}`
-      : 'https://sdk.gigapub.net/sdk.js';
+    sc.src = appId ? `https://sdk.gigapub.net/sdk.js?appId=${appId}` : 'https://sdk.gigapub.net/sdk.js';
     sc.onload = () => { gigapubLoaded.done = true; resolve(); };
     sc.onerror = () => { gigapubLoaded.done = true; resolve(); };
     document.head.appendChild(sc);
   });
 }
 
-/**
- * TADS (tads.me) network SDK loader
- */
+/* --- TADS SDK loader --- */
 function loadTadsSDK(zoneId) {
   return new Promise((resolve) => {
-    const fnName = 'tads_show_' + zoneId;
-    if (typeof window[fnName] === 'function' || window.TADS) { resolve(); return; }
+    if (window.TADS) { resolve(); return; }
     const sc = document.createElement('script');
     sc.src = 'https://cdn.tads.me/sdk.js';
     sc.setAttribute('data-zone', String(zoneId));
@@ -1748,129 +1763,166 @@ function loadTadsSDK(zoneId) {
   });
 }
 
-/**
- * showOneAd(slotIdx) — সব network সাপোর্ট করে
- * Firebase config.adSlots[i] থেকে {network, id} পড়ে।
- *
- * Supported networks (case-insensitive):
- *   adsgram   → Adsgram SDK (sad.min.js already in head)
- *   monetag   → Monetag SDK (dynamic load)
- *   gigapub   → GigaPub SDK (dynamic load)
- *   tads      → TADS SDK (dynamic load)
- *   none/''   → skip (reward anyway)
- */
+/* ============================================================
+   showOneAd(slotIdx) — FIXED
+   
+   Returns: { success: boolean, userCancelled: boolean }
+   - success: true → reward দাও
+   - success: false, userCancelled: true → user নিজে বন্ধ করেছে, reward দিও না
+   - success: false, userCancelled: false → technical error, graceful skip
+============================================================ */
 async function showOneAd(slotIdx) {
-  return new Promise(async (resolve, reject) => {
-    const cfg  = appState.config;
-    const slot = (cfg.adSlots || [])[slotIdx];
+  const cfg  = appState.config;
+  const slot = (cfg.adSlots || [])[slotIdx];
 
-    // slot না থাকলে বা disabled হলে reward দিয়ে continue
-    if (!slot || !slot.id || !slot.network || slot.network === 'none' || slot.network === '') {
-      resolve(); return;
-    }
+  // slot না থাকলে বা disabled হলে success দিয়ে continue
+  if (!slot || !slot.id || !slot.network || slot.network === 'none' || slot.network === '') {
+    return { success: true, userCancelled: false };
+  }
 
-    const net = (slot.network || '').toLowerCase().trim();
-    const id  = String(slot.id).trim();
+  const net = (slot.network || '').toLowerCase().trim();
+  const id  = String(slot.id).trim();
 
-    /* ────────────── ADSGRAM ────────────── */
-    if (net === 'adsgram') {
-      try {
-        // Adsgram SDK head-এ আছে (sad.min.js)
-        // একটু অপেক্ষা করো SDK load হওয়ার জন্য
-        if (!window.Adsgram) {
-          let wait = 0;
-          await new Promise(r => {
-            const p = setInterval(() => {
-              wait++;
-              if (window.Adsgram || wait > 20) { clearInterval(p); r(); }
-            }, 200);
-          });
-        }
-        if (!window.Adsgram) { resolve(); return; } // SDK নেই
-        const ctrl = getAdsgramController(id);
-        if (!ctrl) { resolve(); return; }
+  /* ────────────── ADSGRAM (FIXED) ────────────── */
+  if (net === 'adsgram') {
+    try {
+      // SDK লোড হওয়ার জন্য অপেক্ষা করো
+      const sdkReady = await waitForAdsgram(6000);
+      if (!sdkReady) {
+        console.warn('[Adsgram] SDK not loaded, skipping ad gracefully');
+        return { success: true, userCancelled: false }; // SDK নেই → graceful skip → reward দাও
+      }
+
+      const ctrl = createAdsgramController(id);
+      if (!ctrl) {
+        console.warn('[Adsgram] Controller creation failed');
+        return { success: true, userCancelled: false }; // Controller নেই → graceful skip
+      }
+
+      return await new Promise((resolve) => {
         ctrl.show()
-          .then(() => resolve())
-          .catch(() => reject(new Error("Ad Closed or Cancelled")));
-      } catch(e) { resolve(); }
-      return;
+          .then((result) => {
+            // Ad সফলভাবে দেখা হয়েছে
+            console.log('[Adsgram] Ad shown successfully:', result);
+            resolve({ success: true, userCancelled: false });
+          })
+          .catch((result) => {
+            console.warn('[Adsgram] Ad catch result:', result);
+            
+            // result টা object হতে পারে বা string/Error হতে পারে
+            if (result && typeof result === 'object') {
+              if (result.error === true) {
+                // Technical error: "no ads available", network error ইত্যাদি
+                // এই ক্ষেত্রে user-এর দোষ নেই → reward দাও (graceful skip)
+                console.log('[Adsgram] Technical error (no ads/network), granting reward gracefully');
+                resolve({ success: true, userCancelled: false });
+              } else if (isAdsgramUserCancelled(result)) {
+                // User নিজে বন্ধ করেছে
+                console.log('[Adsgram] User cancelled the ad');
+                resolve({ success: false, userCancelled: true });
+              } else {
+                // অন্য কোনো case → graceful skip
+                resolve({ success: true, userCancelled: false });
+              }
+            } else {
+              // result string বা অন্য type → graceful skip (reward দাও)
+              console.log('[Adsgram] Non-object catch result, granting reward gracefully');
+              resolve({ success: true, userCancelled: false });
+            }
+          });
+      });
+    } catch(e) {
+      console.error('[Adsgram] Unexpected error:', e);
+      return { success: true, userCancelled: false }; // unexpected error → graceful skip
     }
+  }
 
-    /* ────────────── MONETAG ────────────── */
-    if (net === 'monetag') {
-      try {
-        // SDK dynamically load করো
-        await loadMonetagSDK(id);
-        const fnName = 'show_' + id;
-        const fn = window[fnName];
-        if (typeof fn !== 'function') {
-          // Fallback: legacy URL যদি কাজ না করে
-          resolve(); return;
-        }
+  /* ────────────── MONETAG ────────────── */
+  if (net === 'monetag') {
+    try {
+      await loadMonetagSDK(id);
+      const fnName = 'show_' + id;
+      const fn = window[fnName];
+      if (typeof fn !== 'function') {
+        console.warn('[Monetag] SDK function not found:', fnName);
+        return { success: true, userCancelled: false }; // graceful skip
+      }
+      return await new Promise((resolve) => {
         fn()
-          .then(() => resolve())
-          .catch(() => reject(new Error("Ad Closed or Cancelled")));
-      } catch(e) { resolve(); }
-      return;
+          .then(() => {
+            resolve({ success: true, userCancelled: false });
+          })
+          .catch((err) => {
+            console.warn('[Monetag] Ad error:', err);
+            // Monetag error → graceful skip (reward দাও)
+            resolve({ success: true, userCancelled: false });
+          });
+      });
+    } catch(e) {
+      console.error('[Monetag] Unexpected error:', e);
+      return { success: true, userCancelled: false };
     }
+  }
 
-    /* ────────────── GIGAPUB ────────────── */
-    if (net === 'gigapub') {
-      try {
-        await loadGigaPubSDK(id); // id = appId for GigaPub
-        // GigaPub বিভিন্ন method নামে expose করে
-        const showFn =
-          (typeof window.showGiga === 'function' && window.showGiga) ||
-          (window.TelegramGiga && typeof window.TelegramGiga.show === 'function' && (() => window.TelegramGiga.show())) ||
-          (window.GigaPub && typeof window.GigaPub.show === 'function' && (() => window.GigaPub.show())) ||
-          null;
-        if (!showFn) { resolve(); return; }
+  /* ────────────── GIGAPUB ────────────── */
+  if (net === 'gigapub') {
+    try {
+      await loadGigaPubSDK(id);
+      const showFn =
+        (typeof window.showGiga === 'function' && window.showGiga) ||
+        (window.TelegramGiga && typeof window.TelegramGiga.show === 'function' && (() => window.TelegramGiga.show())) ||
+        (window.GigaPub && typeof window.GigaPub.show === 'function' && (() => window.GigaPub.show())) ||
+        null;
+      if (!showFn) return { success: true, userCancelled: false };
+      return await new Promise((resolve) => {
         showFn()
-          .then(() => resolve())
-          .catch(() => reject(new Error("Ad Closed or Cancelled")));
-      } catch(e) { resolve(); }
-      return;
+          .then(() => resolve({ success: true, userCancelled: false }))
+          .catch(() => resolve({ success: true, userCancelled: false })); // graceful
+      });
+    } catch(e) {
+      return { success: true, userCancelled: false };
     }
+  }
 
-    /* ────────────── TADS ────────────── */
-    if (net === 'tads') {
-      try {
-        await loadTadsSDK(id);
-        // TADS SDK call
-        const showFn =
-          (window.TADS && typeof window.TADS.show === 'function' && (() => window.TADS.show({ zone: id }))) ||
-          (typeof window['tads_show'] === 'function' && (() => window['tads_show'](id))) ||
-          null;
-        if (!showFn) { resolve(); return; }
+  /* ────────────── TADS ────────────── */
+  if (net === 'tads') {
+    try {
+      await loadTadsSDK(id);
+      const showFn =
+        (window.TADS && typeof window.TADS.show === 'function' && (() => window.TADS.show({ zone: id }))) ||
+        (typeof window['tads_show'] === 'function' && (() => window['tads_show'](id))) ||
+        null;
+      if (!showFn) return { success: true, userCancelled: false };
+      return await new Promise((resolve) => {
         showFn()
-          .then(() => resolve())
-          .catch(() => reject(new Error("Ad Closed or Cancelled")));
-      } catch(e) { resolve(); }
-      return;
+          .then(() => resolve({ success: true, userCancelled: false }))
+          .catch(() => resolve({ success: true, userCancelled: false }));
+      });
+    } catch(e) {
+      return { success: true, userCancelled: false };
     }
+  }
 
-    /* ────────────── CUSTOM / UNKNOWN ────────────── */
-    // অজানা network হলে reward দিয়ে continue করো
-    resolve();
-  });
+  /* ────────────── UNKNOWN NETWORK ────────────── */
+  return { success: true, userCancelled: false };
 }
 
 /* --- Preload ads on config load --- */
 function preloadAds() {
   const cfg   = appState.config;
   const slots = cfg.adSlots || [];
-  slots.forEach((slot, i) => {
+  slots.forEach((slot) => {
     if (!slot || !slot.id || !slot.network || slot.network === 'none') return;
     const net = (slot.network || '').toLowerCase().trim();
     const id  = String(slot.id).trim();
-    // Adsgram preload
-    if (net === 'adsgram' && window.Adsgram) {
-      try { getAdsgramController(id); } catch(e) {}
+    if (net === 'adsgram') {
+      // Adsgram SDK ready check — controller create করি না (show() এর সময় করা হবে)
+      waitForAdsgram(3000).then(ready => {
+        if (ready) console.log('[Adsgram] SDK ready for blockId:', id);
+      });
     }
-    // Monetag preload — SDK লোড করে রাখো
-    if (net === 'monetag') { loadMonetagSDK(id); }
-    // GigaPub preload
-    if (net === 'gigapub') { loadGigaPubSDK(id); }
+    if (net === 'monetag') loadMonetagSDK(id);
+    if (net === 'gigapub') loadGigaPubSDK(id);
   });
 }
 
@@ -1909,6 +1961,9 @@ function renderAds() {
   el.innerHTML = rendered > 0 ? html : '<p style="color:var(--text-muted);font-size:.85rem;text-align:center;padding:20px;grid-column:1/-1;">No ads available right now.</p>';
 }
 
+/* ============================================================
+   WATCH AD — FIXED
+============================================================ */
 async function watchAd(slotIdx) {
   const cfg   = appState.config;
   const slot  = (cfg.adSlots || [])[slotIdx];
@@ -1919,22 +1974,27 @@ async function watchAd(slotIdx) {
   );
   if (watchedToday >= limit) return toast('আজকের জন্য এই অ্যাডের লিমিট শেষ!');
   if (!slot || !slot.id || slot.network === 'none') return toast('এই অ্যাড স্লট সক্রিয় নেই।');
-  try {
-    await showOneAd(slotIdx);
-    const reward  = Number(cfg.adReward || 0.5);
-    const sym     = cfg.currencySymbol || 'TK';
-    const newBal  = (appState.user.balance || 0) + reward;
-    const newEarn = (appState.user.totalEarned || 0) + reward;
-    const newCount= watchedToday + 1;
-    await db.ref('users/' + appState.user.id).update({
-      balance:    newBal,
-      totalEarned: newEarn,
-      ['dailyAds/' + today + '/slot_' + slotIdx]: newCount
-    });
-    toast('+' + reward + ' ' + sym + ' যোগ হয়েছে!');
-  } catch(e) {
+
+  const result = await showOneAd(slotIdx);
+
+  if (result.userCancelled) {
+    // User নিজে বন্ধ করেছে → reward নেই
     toast('অ্যাড সম্পূর্ণ না দেখলে পুরস্কার পাবেন না');
+    return;
   }
+
+  // success:true (ad দেখা হয়েছে অথবা gracefully skip) → reward দাও
+  const reward  = Number(cfg.adReward || 0.5);
+  const sym     = cfg.currencySymbol || 'TK';
+  const newBal  = (appState.user.balance || 0) + reward;
+  const newEarn = (appState.user.totalEarned || 0) + reward;
+  const newCount= watchedToday + 1;
+  await db.ref('users/' + appState.user.id).update({
+    balance:    newBal,
+    totalEarned: newEarn,
+    ['dailyAds/' + today + '/slot_' + slotIdx]: newCount
+  });
+  toast('+' + reward + ' ' + sym + ' যোগ হয়েছে!');
 }
 
 /* ============================================================
@@ -2191,7 +2251,7 @@ window.onload = () => {
   db.ref('config').on('value', snap => {
     if (snap.exists()) {
       appState.config = snap.val();
-      preloadAds(); // নতুন config এলে ads preload করো
+      preloadAds();
       if (isBooted) { updateTextElements(); renderAds(); renderTasks(); renderSellPage(); renderWithdrawNotice(); }
     }
   });
@@ -2248,7 +2308,6 @@ window.onload = () => {
         if (appState.user.isBanned) { showBanScreen(appState.user.banReason || 'Your account has been suspended.'); return; }
         if (!appState.user.dailyAds)    appState.user.dailyAds = {};
         if (!appState.user.taskHistory) appState.user.taskHistory = {};
-        // নতুন দিনে dailyAds রিসেট
         if (appState.user.lastActive !== today) {
           await userRef.update({ dailyAds: {}, lastActive: today });
           appState.user.dailyAds = {};
