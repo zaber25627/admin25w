@@ -943,20 +943,63 @@ let appState = {
   config: { adSlots:[], webTasks:{} }
 };
 let isBooted = false;
+
+/* ─── Loader dismiss guard: একবারই dismiss হবে ─── */
+let _loaderDismissed = false;
+let _loaderFallbackTimer = null;
+
 let tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user)
   ? tg.initDataUnsafe.user
   : { id:'123456', first_name:'Guest User', photo_url:'https://via.placeholder.com/100' };
 
 /* ============================================================
-   LOADER
+   LOADER — OPTIMIZED
+   ─ loaderStep: UI feedback দেয়
+   ─ dismissLoader: শুধু একবার চলে, 500ms fade তারপর hide
+   ─ startLoaderFallback: max 5s পরে force dismiss
 ============================================================ */
 function loaderStep(step, text) {
-  if (text) document.getElementById('loader-status-text').innerText = text;
+  if (_loaderDismissed) return;
+  if (text) {
+    const el = document.getElementById('loader-status-text');
+    if (el) el.innerText = text;
+  }
   const bar = document.getElementById('ld-bar');
   if (bar) {
-    const pct = {1:25, 2:55, 3:80, 4:100}[step] || (parseInt(bar.style.width) || 10);
+    const pct = {1:20, 2:50, 3:75, 4:100}[step] || (parseInt(bar.style.width) || 10);
     bar.style.width = pct + '%';
   }
+}
+
+function dismissLoader() {
+  if (_loaderDismissed) return;
+  _loaderDismissed = true;
+  if (_loaderFallbackTimer) { clearTimeout(_loaderFallbackTimer); _loaderFallbackTimer = null; }
+  const bar = document.getElementById('ld-bar');
+  if (bar) bar.style.width = '100%';
+  const statusEl = document.getElementById('loader-status-text');
+  if (statusEl) statusEl.innerText = 'প্রস্তুত!';
+  /* ছোট্ট delay দিয়ে 100% bar দেখানো হয়, তারপর fade out */
+  setTimeout(() => {
+    const ld = document.getElementById('loader');
+    if (ld) {
+      ld.classList.add('hide');
+      setTimeout(() => { ld.style.display = 'none'; }, 480);
+    }
+  }, 220);
+}
+
+/* 5 সেকেন্ড পরে যদি কিছু না হয় — জোর করে dismiss */
+function startLoaderFallback() {
+  if (_loaderFallbackTimer) return;
+  _loaderFallbackTimer = setTimeout(() => {
+    if (!_loaderDismissed) {
+      /* App div দেখান, minimal state দিয়ে */
+      document.getElementById('app').style.display = 'block';
+      checkChannelJoin();
+      dismissLoader();
+    }
+  }, 5000);
 }
 
 /* ============================================================
@@ -1013,8 +1056,7 @@ function switchTab(tabId, el) {
    BAN SCREEN
 ============================================================ */
 function showBanScreen(reason) {
-  const ld = document.getElementById('loader');
-  ld.classList.add('hide');
+  dismissLoader();
   const bs = document.getElementById('banScreen');
   bs.style.display = 'flex';
   document.getElementById('banMsg').innerText = reason || 'Your account has been suspended.';
@@ -1579,15 +1621,8 @@ async function submitSellItem(type) {
 }
 
 /* ============================================================
-   ══════════════════════════════════════════════════════════
-   AD ENGINE — FIXED VERSION
-   Adsgram: "no ads" error gracefully handle করে
-   Monetag: SDK ready হওয়া পর্যন্ত পোল করে
-   GigaPub: multiple method names সাপোর্ট করে
-   ══════════════════════════════════════════════════════════
+   AD ENGINE — FIXED VERSION (অপরিবর্তিত)
 ============================================================ */
-
-/* --- Adsgram Controller Cache --- */
 const _adsgramControllers = {};
 
 function getAdsgramController(blockId) {
@@ -1600,15 +1635,12 @@ function getAdsgramController(blockId) {
   } catch(e) { return null; }
 }
 
-/* --- Monetag SDK Loader --- */
 const _monetagLoaded = {};
 
 function loadMonetagSDK(zoneId) {
   return new Promise((resolve) => {
     const fnName = 'show_' + zoneId;
-    // ইতিমধ্যে function আছে — সরাসরি resolve
     if (typeof window[fnName] === 'function') { resolve(); return; }
-    // ইতিমধ্যে script যোগ করা হয়েছে — পোল করো
     if (_monetagLoaded[zoneId]) {
       let att = 0;
       const p = setInterval(() => {
@@ -1618,13 +1650,11 @@ function loadMonetagSDK(zoneId) {
       return;
     }
     _monetagLoaded[zoneId] = true;
-    // Script ডায়নামিক লোড
     const sc = document.createElement('script');
     sc.src = '//libtl.com/sdk.js';
     sc.setAttribute('data-zone', String(zoneId));
     sc.setAttribute('data-sdk', fnName);
     sc.onload = () => {
-      // SDK init হতে একটু সময় লাগে, পোল করো
       let att = 0;
       const p = setInterval(() => {
         att++;
@@ -1636,12 +1666,10 @@ function loadMonetagSDK(zoneId) {
   });
 }
 
-/* --- GigaPub SDK Loader --- */
 const _gigapubState = { loaded: false, loading: false };
 
 function loadGigaPubSDK(appId) {
   return new Promise((resolve) => {
-    // ইতিমধ্যে কোনো show function আছে
     if (window.showGiga || (window.TelegramGiga && window.TelegramGiga.show) || (window.GigaPub && window.GigaPub.show)) {
       resolve(); return;
     }
@@ -1663,23 +1691,17 @@ function loadGigaPubSDK(appId) {
   });
 }
 
-/* --- Main Ad Show Function --- */
 async function showOneAd(slotIdx) {
   return new Promise(async (resolve, reject) => {
     const cfg  = appState.config;
     const slot = (cfg.adSlots || [])[slotIdx];
-
-    // slot নেই বা disabled — reward দিয়ে continue
     if (!slot || !slot.id || !slot.network || slot.network === 'none' || slot.network === '') {
       resolve(); return;
     }
-
     const net = (slot.network || '').toLowerCase().trim();
     const id  = String(slot.id).trim();
 
-    /* ──────── ADSGRAM ──────── */
     if (net === 'adsgram') {
-      // Adsgram SDK লোড হওয়ার জন্য অপেক্ষা করো (max 4s)
       if (!window.Adsgram) {
         let waited = 0;
         await new Promise(r => {
@@ -1689,81 +1711,44 @@ async function showOneAd(slotIdx) {
           }, 200);
         });
       }
-
-      if (!window.Adsgram) {
-        // SDK লোড হয়নি — reward দিয়ে continue
-        resolve(); return;
-      }
-
+      if (!window.Adsgram) { resolve(); return; }
       try {
         const ctrl = getAdsgramController(id);
         if (!ctrl) { resolve(); return; }
-
         ctrl.show()
-          .then((result) => {
-            // result.done = true মানে ad সম্পন্ন হয়েছে
-            resolve();
-          })
+          .then(() => { resolve(); })
           .catch((result) => {
-            // result.error = true এবং result.description দেখে সিদ্ধান্ত নাও
-            // "There are currently no ads to display" — এটা user এর দোষ না
-            // তাই reward দিয়ে continue করো (reject করো না)
             const desc = (result && result.description) ? String(result.description).toLowerCase() : '';
             const isNoAds = desc.includes('no ads') || desc.includes('no ad') || desc.includes('currently no');
-            if (isNoAds) {
-              // কোনো ad নেই — reward দেওয়া যাবে
-              resolve();
-            } else {
-              // User cancel করেছে বা অন্য error
-              reject(new Error("Ad Closed or Cancelled"));
-            }
+            if (isNoAds) { resolve(); } else { reject(new Error("Ad Closed or Cancelled")); }
           });
-      } catch(e) {
-        resolve(); // unexpected error — reward দিয়ে continue
-      }
+      } catch(e) { resolve(); }
       return;
     }
 
-    /* ──────── MONETAG ──────── */
     if (net === 'monetag') {
       try {
-        // SDK লোড করো এবং function ready হওয়া পর্যন্ত অপেক্ষা করো
         await loadMonetagSDK(id);
         const fn = window['show_' + id];
-        if (typeof fn !== 'function') {
-          // Function এখনো তৈরি হয়নি — reward দিয়ে continue
-          resolve(); return;
-        }
-        fn()
-          .then(() => resolve())
-          .catch(() => reject(new Error("Ad Closed or Cancelled")));
-      } catch(e) {
-        resolve();
-      }
+        if (typeof fn !== 'function') { resolve(); return; }
+        fn().then(() => resolve()).catch(() => reject(new Error("Ad Closed or Cancelled")));
+      } catch(e) { resolve(); }
       return;
     }
 
-    /* ──────── GIGAPUB ──────── */
     if (net === 'gigapub') {
       try {
         await loadGigaPubSDK(id);
-        // GigaPub বিভিন্ন method নামে expose করে
         const showFn =
           (typeof window.showGiga === 'function' ? (() => window.showGiga()) : null) ||
           (window.TelegramGiga && typeof window.TelegramGiga.show === 'function' ? (() => window.TelegramGiga.show()) : null) ||
           (window.GigaPub && typeof window.GigaPub.show === 'function' ? (() => window.GigaPub.show()) : null);
-
         if (!showFn) { resolve(); return; }
-        showFn()
-          .then(() => resolve())
-          .catch(() => reject(new Error("Ad Closed or Cancelled")));
-      } catch(e) {
-        resolve();
-      }
+        showFn().then(() => resolve()).catch(() => reject(new Error("Ad Closed or Cancelled")));
+      } catch(e) { resolve(); }
       return;
     }
 
-    /* ──────── TADS ──────── */
     if (net === 'tads') {
       try {
         if (!window.TADS) {
@@ -1776,45 +1761,32 @@ async function showOneAd(slotIdx) {
           (window.TADS && typeof window.TADS.show === 'function' ? (() => window.TADS.show({ zone: id })) : null) ||
           (typeof window['tads_show'] === 'function' ? (() => window['tads_show'](id)) : null);
         if (!showFn) { resolve(); return; }
-        showFn()
-          .then(() => resolve())
-          .catch(() => reject(new Error("Ad Closed or Cancelled")));
-      } catch(e) {
-        resolve();
-      }
+        showFn().then(() => resolve()).catch(() => reject(new Error("Ad Closed or Cancelled")));
+      } catch(e) { resolve(); }
       return;
     }
 
-    /* ──────── UNKNOWN NETWORK ──────── */
     resolve();
   });
 }
 
-/* --- Preload Ads --- */
 function preloadAds() {
   const slots = appState.config.adSlots || [];
   slots.forEach(slot => {
     if (!slot || !slot.id || !slot.network || slot.network === 'none') return;
     const net = (slot.network || '').toLowerCase().trim();
     const id  = String(slot.id).trim();
-    // Adsgram: SDK ready হলে preload করো
     if (net === 'adsgram') {
       if (window.Adsgram) {
         try { getAdsgramController(id); } catch(e) {}
       } else {
-        // SDK load এর জন্য অপেক্ষা করো তারপর preload
         const waitAndLoad = setInterval(() => {
-          if (window.Adsgram) {
-            clearInterval(waitAndLoad);
-            try { getAdsgramController(id); } catch(e) {}
-          }
+          if (window.Adsgram) { clearInterval(waitAndLoad); try { getAdsgramController(id); } catch(e) {} }
         }, 500);
         setTimeout(() => clearInterval(waitAndLoad), 10000);
       }
     }
-    // Monetag: SDK preload করো
     if (net === 'monetag') { loadMonetagSDK(id); }
-    // GigaPub: SDK preload করো
     if (net === 'gigapub') { loadGigaPubSDK(id); }
   });
 }
@@ -1872,8 +1844,7 @@ async function watchAd(slotIdx) {
     const newEarn = (appState.user.totalEarned || 0) + reward;
     const newCount= watchedToday + 1;
     await db.ref('users/' + appState.user.id).update({
-      balance:    newBal,
-      totalEarned: newEarn,
+      balance: newBal, totalEarned: newEarn,
       ['dailyAds/' + today + '/slot_' + slotIdx]: newCount
     });
     toast('+' + reward + ' ' + sym + ' যোগ হয়েছে!');
@@ -2045,8 +2016,10 @@ async function checkChannelJoin() {
   const cfg      = appState.config;
   const channels = cfg.requiredChannels || [];
   if (!channels.length || !channels.some(c => c && c.username)) { showApp(); return; }
-  const userSnap = await db.ref('users/' + tgUser.id + '/channelVerified').once('value');
-  if (userSnap.exists() && userSnap.val() === true) { showApp(); return; }
+  try {
+    const userSnap = await db.ref('users/' + tgUser.id + '/channelVerified').once('value');
+    if (userSnap.exists() && userSnap.val() === true) { showApp(); return; }
+  } catch(e) { showApp(); return; }
   renderChannelList();
   document.getElementById('channelJoinOverlay').classList.add('show');
 }
@@ -2123,90 +2096,224 @@ function checkWithdrawEnabled() {
 }
 
 /* ============================================================
-   MAIN INIT
+   ██████████████████████████████████████████████████████████
+   MAIN INIT — OPTIMIZED FOR FAST LOADING (2–5 SECONDS MAX)
+   ──────────────────────────────────────────────────────────
+   কৌশল:
+   1. tgUser info সাথে সাথে UI-তে দেখানো হয় (0ms)
+   2. config + user data PARALLEL fetch করা হয়
+   3. যেটা আগে আসে সেটা দিয়ে UI render শুরু হয়
+   4. দুটো fetch শেষ হলে loader dismiss হয়
+   5. Hard fallback: 5s পরে জোর করে dismiss
+   6. নতুন user setup (referral, device check) background-এ চলে
+   ██████████████████████████████████████████████████████████
 ============================================================ */
 window.onload = () => {
-  loaderStep(1, 'সংযোগ হচ্ছে…');
-  document.getElementById('u-name').innerText = tgUser.first_name;
-  document.getElementById('u-id').innerText   = 'ID: ' + tgUser.id;
-  if (tgUser.photo_url) document.getElementById('u-img').src = tgUser.photo_url;
 
-  db.ref('config').on('value', snap => {
-    if (snap.exists()) {
-      appState.config = snap.val();
-      preloadAds();
-      if (isBooted) { updateTextElements(); renderAds(); renderTasks(); renderSellPage(); renderWithdrawNotice(); }
+  /* ── Step 0: তৎক্ষণাৎ UI তথ্য দেখানো + fallback শুরু ── */
+  document.getElementById('u-name').innerText = tgUser.first_name || 'User';
+  document.getElementById('u-id').innerText   = 'ID: ' + tgUser.id;
+  if (tgUser.photo_url) {
+    document.getElementById('u-img').src = tgUser.photo_url;
+    const pImg = document.getElementById('p-img');
+    if (pImg) pImg.src = tgUser.photo_url;
+  }
+
+  loaderStep(1, 'সংযোগ হচ্ছে…');
+
+  /* ── Hard fallback: 5s পরে যদি কিছু না হয় dismiss হবে ── */
+  startLoaderFallback();
+
+  const today      = todayStr();
+  const userRef    = db.ref('users/' + tgUser.id);
+  const configRef  = db.ref('config');
+
+  /* ── Step 1: config + user PARALLEL fetch ── */
+  loaderStep(2, 'ডেটা লোড হচ্ছে…');
+
+  let configLoaded = false;
+  let userLoaded   = false;
+  let userDataVal  = null;
+  let userExists   = false;
+
+  /* Config আসলে সাথে সাথে ads/tasks render করো */
+  function onConfigReady(cfg) {
+    appState.config = cfg;
+    preloadAds();
+    if (isBooted) {
+      updateTextElements();
+      renderAds();
+      renderTasks();
+      renderSellPage();
+      renderWithdrawNotice();
     }
+  }
+
+  /* User data আসলে সাথে সাথে balance/UI update করো */
+  function onUserReady(userData) {
+    appState.user = userData;
+    if (!appState.user.dailyAds)    appState.user.dailyAds = {};
+    if (!appState.user.taskHistory) appState.user.taskHistory = {};
+    updateTextElements();
+    renderAds();
+    renderTasks();
+    renderRefTasks();
+  }
+
+  /* দুটো লোড শেষ হলে app খুলবে */
+  function tryBootApp() {
+    if (!configLoaded || !userLoaded) return;
+    if (isBooted) return;
+    isBooted = true;
+
+    loaderStep(4, 'প্রস্তুত!');
+
+    /* ban check */
+    if (userDataVal && userDataVal.isBanned) {
+      showBanScreen(userDataVal.banReason || 'Your account has been suspended.');
+      dismissLoader();
+      return;
+    }
+
+    /* daily reset check */
+    if (userDataVal && userDataVal.lastActive !== today) {
+      userRef.update({ dailyAds: {}, lastActive: today });
+      appState.user.dailyAds = {};
+      renderAds();
+    }
+
+    /* Loader dismiss করো */
+    dismissLoader();
+
+    /* Channel join check → তারপর app দেখাও */
+    checkChannelJoin();
+  }
+
+  /* ── Config real-time listener (live updates) ── */
+  configRef.on('value', snap => {
+    if (!snap || !snap.exists()) {
+      /* Config না থাকলেও continue করো default দিয়ে */
+      configLoaded = true;
+      tryBootApp();
+      return;
+    }
+    const cfg = snap.val();
+    onConfigReady(cfg);
+    if (!configLoaded) {
+      configLoaded = true;
+      loaderStep(2, 'কনফিগ লোড হয়েছে…');
+      tryBootApp();
+    }
+  }, () => {
+    /* config fetch error — default দিয়ে continue */
+    configLoaded = true;
+    tryBootApp();
   });
 
-  loaderStep(2, 'ইউজার ডেটা লোড হচ্ছে…');
-  const userRef = db.ref('users/' + tgUser.id);
+  /* ── User data: প্রথমে once() দিয়ে fast fetch, তারপর live listener ── */
   userRef.once('value').then(async snap => {
-    const today = todayStr();
-    loaderStep(2, 'ডিভাইস যাচাই হচ্ছে…');
+    loaderStep(3, 'ইউজার ডেটা লোড হচ্ছে…');
 
     if (!snap.exists()) {
-      const deviceOk = await checkDeviceLimit(tgUser.id);
-      const newUser  = {
+      userExists = false;
+
+      /* নতুন user — default state দিয়ে সাথে সাথে boot করো */
+      const newUser = {
         id: tgUser.id, name: tgUser.first_name, photo: tgUser.photo_url || '',
         balance: 0, totalEarned: 0, referrals: 0, dailyAds: {}, taskHistory: {},
         lastActive: today, dailyBonusDate: '', totalWithdrawn: 0, totalAdsWatched: 0,
-        isBanned: !deviceOk, banReason: deviceOk ? '' : 'Multiple accounts detected. Max 3 accounts per device.'
+        isBanned: false, banReason: ''
       };
-      await userRef.set(newUser);
-      if (!deviceOk) { showBanScreen(newUser.banReason); return; }
+      appState.user = newUser;
+      userDataVal   = newUser;
+      userLoaded    = true;
+      tryBootApp(); /* ← সাথে সাথে boot */
 
-      let refBy = (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) ? tg.initDataUnsafe.start_param : null;
-      if (!refBy) { const urlParams = new URLSearchParams(window.location.search); refBy = urlParams.get('tgWebAppStartParam') || urlParams.get('startapp'); }
-      if (refBy && String(refBy) !== String(tgUser.id)) {
-        let cSnap  = await db.ref('config').once('value');
-        let rBonus = (cSnap.exists() && cSnap.val().refBonus) ? Number(cSnap.val().refBonus) : 5;
-        let refSnap= await db.ref('users/' + refBy).once('value');
-        if (refSnap.exists()) {
-          let r            = refSnap.val();
-          const newRefCount= (r.referrals || 0) + 1;
-          await db.ref('users/' + refBy).update({ referrals: newRefCount, balance: (r.balance||0) + rBonus, totalEarned: (r.totalEarned||0) + rBonus });
-          const sym    = (cSnap.exists() && cSnap.val().currencySymbol) ? cSnap.val().currencySymbol : 'TK';
-          const token  = (cSnap.exists() && (cSnap.val().adminNotifyToken || cSnap.val().botVerifyToken)) ? (cSnap.val().adminNotifyToken || cSnap.val().botVerifyToken) : '';
-          if (token) {
-            try {
-              await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                method:'POST', headers:{'Content-Type':'application/json'},
-                body: JSON.stringify({ chat_id: String(refBy), parse_mode:'HTML',
-                  text: `🎉 <b>নতুন রেফারেল যোগ হয়েছে!</b>\n━━━━━━━━━━━━━━━\n👤 নতুন সদস্য: <b>${tgUser.first_name}</b>\n💰 রেফার বোনাস: <b>+${rBonus} ${sym}</b>\n👥 মোট রেফারেল: <b>${newRefCount}</b>\n━━━━━━━━━━━━━━━\n🔥 আরও বন্ধু রেফার করুন!` })
-              });
-            } catch(e) {}
+      /* Background-এ: device check + DB write + referral processing */
+      Promise.resolve().then(async () => {
+        try {
+          const deviceOk = await checkDeviceLimit(tgUser.id);
+          if (!deviceOk) {
+            newUser.isBanned = true;
+            newUser.banReason = 'Multiple accounts detected. Max 3 accounts per device.';
+            showBanScreen(newUser.banReason);
           }
-        }
-      }
+          await userRef.set({ ...newUser, isBanned: !deviceOk, banReason: deviceOk ? '' : newUser.banReason });
+
+          /* Referral processing */
+          let refBy = (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) ? tg.initDataUnsafe.start_param : null;
+          if (!refBy) { const urlParams = new URLSearchParams(window.location.search); refBy = urlParams.get('tgWebAppStartParam') || urlParams.get('startapp'); }
+          if (refBy && String(refBy) !== String(tgUser.id)) {
+            const cSnap  = await configRef.once('value');
+            const rBonus = (cSnap.exists() && cSnap.val().refBonus) ? Number(cSnap.val().refBonus) : 5;
+            const refSnap= await db.ref('users/' + refBy).once('value');
+            if (refSnap.exists()) {
+              const r            = refSnap.val();
+              const newRefCount  = (r.referrals || 0) + 1;
+              await db.ref('users/' + refBy).update({ referrals: newRefCount, balance: (r.balance||0) + rBonus, totalEarned: (r.totalEarned||0) + rBonus });
+              const sym   = (cSnap.exists() && cSnap.val().currencySymbol) ? cSnap.val().currencySymbol : 'TK';
+              const token = (cSnap.exists() && (cSnap.val().adminNotifyToken || cSnap.val().botVerifyToken)) ? (cSnap.val().adminNotifyToken || cSnap.val().botVerifyToken) : '';
+              if (token) {
+                try {
+                  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    method:'POST', headers:{'Content-Type':'application/json'},
+                    body: JSON.stringify({ chat_id: String(refBy), parse_mode:'HTML',
+                      text: `🎉 <b>নতুন রেফারেল যোগ হয়েছে!</b>\n━━━━━━━━━━━━━━━\n👤 নতুন সদস্য: <b>${tgUser.first_name}</b>\n💰 রেফার বোনাস: <b>+${rBonus} ${sym}</b>\n👥 মোট রেফারেল: <b>${newRefCount}</b>\n━━━━━━━━━━━━━━━\n🔥 আরও বন্ধু রেফার করুন!` })
+                  });
+                } catch(e) {}
+              }
+            }
+          }
+        } catch(bgErr) { /* silent fail */ }
+      });
+
     } else {
-      await checkDeviceLimit(tgUser.id);
+      userExists  = true;
+      userDataVal = snap.val();
+      onUserReady(userDataVal);
+      userLoaded = true;
+
+      /* Background-এ device check */
+      checkDeviceLimit(tgUser.id).catch(() => {});
+
+      tryBootApp();
     }
 
-    loaderStep(3, 'ডেটা লোড হচ্ছে…');
-    userRef.on('value', async liveSnap => {
-      if (liveSnap.exists()) {
-        appState.user = liveSnap.val();
-        if (appState.user.isBanned) { showBanScreen(appState.user.banReason || 'Your account has been suspended.'); return; }
-        if (!appState.user.dailyAds)    appState.user.dailyAds = {};
-        if (!appState.user.taskHistory) appState.user.taskHistory = {};
-        if (appState.user.lastActive !== today) {
-          await userRef.update({ dailyAds: {}, lastActive: today });
-          appState.user.dailyAds = {};
-        }
-        updateTextElements(); renderAds(); renderTasks(); renderRefTasks();
-        if (!isBooted) {
-          isBooted = true;
-          loaderStep(4, 'প্রস্তুত!');
-          setTimeout(() => {
-            const ld = document.getElementById('loader');
-            ld.classList.add('hide');
-            setTimeout(() => { ld.style.display = 'none'; }, 450);
-            checkChannelJoin();
-          }, 200);
-        }
+    /* ── Live listener: real-time balance/config updates ── */
+    userRef.on('value', liveSnap => {
+      if (!liveSnap || !liveSnap.exists()) return;
+      const liveData = liveSnap.val();
+
+      /* Ban check on live update */
+      if (liveData.isBanned) {
+        showBanScreen(liveData.banReason || 'Your account has been suspended.');
+        return;
+      }
+
+      appState.user = liveData;
+      if (!appState.user.dailyAds)    appState.user.dailyAds = {};
+      if (!appState.user.taskHistory) appState.user.taskHistory = {};
+
+      /* Daily reset */
+      if (appState.user.lastActive !== today) {
+        userRef.update({ dailyAds: {}, lastActive: today });
+        appState.user.dailyAds = {};
+      }
+
+      if (isBooted) {
+        updateTextElements();
+        renderAds();
+        renderTasks();
+        renderRefTasks();
       }
     });
+
+  }).catch(() => {
+    /* User fetch error — default state দিয়ে continue */
+    userLoaded  = true;
+    userDataVal = { id: tgUser.id, name: tgUser.first_name, photo: tgUser.photo_url || '', balance: 0, totalEarned: 0, referrals: 0, dailyAds: {}, taskHistory: {}, lastActive: today, dailyBonusDate: '', totalWithdrawn: 0, totalAdsWatched: 0, isBanned: false, banReason: '' };
+    appState.user = userDataVal;
+    tryBootApp();
   });
 };
 </script>
