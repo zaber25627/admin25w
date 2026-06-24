@@ -708,38 +708,6 @@
     .channel-inputs { flex: 1; display: flex; gap: 8px; }
     @media (max-width: 500px) { .channel-inputs { flex-direction: column; } }
 
-    .sell-platform {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
-      margin-bottom: 12px;
-      transition: 0.2s;
-    }
-    .sell-platform:hover { border-color: var(--border-hover); }
-    .sell-platform-head {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-    .sell-platform-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
-    .logo-gmail { background: rgba(234,67,53,0.15); color: #EA4335; }
-    .logo-instagram { background: linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045); color: #fff; }
-    .logo-facebook { background: rgba(24,119,242,0.15); color: #1877F2; }
-    .logo-tiktok { background: rgba(0,0,0,0.4); color: #69C9D0; }
-    .logo-telegram { background: rgba(0,136,204,0.15); color: #0088cc; }
-    .logo-whatsapp { background: rgba(37,211,102,0.15); color: #25D366; }
-
     .wd-card {
       background: rgba(255,255,255,0.02);
       border: 1px solid var(--border);
@@ -1110,6 +1078,144 @@
       margin-top: 6px;
       font-weight: 600;
     }
+
+    /* Winner Selection Modal */
+    .winner-select-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 8500;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(14px);
+      padding: 18px;
+    }
+    .winner-select-overlay.show { display: flex; }
+    .winner-select-card {
+      background: var(--card-solid);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow);
+      animation: modalIn 0.25s ease-out;
+      border: 1px solid var(--glass-border);
+    }
+    .participant-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xs);
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+    }
+    .participant-item .p-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .participant-item .p-name { font-weight: 700; color: #fff; }
+    .participant-item .p-id { font-size: 0.7rem; color: var(--text-dim); font-weight: 600; }
+    .participant-item.is-winner {
+      border-color: rgba(16,185,129,0.4);
+      background: rgba(16,185,129,0.08);
+    }
+    .participant-item.is-winner .p-name::after {
+      content: ' \1F3C6';
+      font-size: 0.85rem;
+    }
+
+    /* Giveaway Result Card */
+    .gv-result-card {
+      background: linear-gradient(135deg, rgba(16,185,129,0.06), rgba(124,58,237,0.06));
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+    .gv-result-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .gv-result-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.15));
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .gv-result-title { font-weight: 900; font-size: 1.05rem; color: #fff; }
+    .gv-result-desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; font-weight: 500; }
+    .gv-result-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .gv-result-stat {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xs);
+      padding: 12px;
+      text-align: center;
+    }
+    .gv-result-stat-val { font-size: 1rem; font-weight: 900; color: var(--primary-light); }
+    .gv-result-stat-label { font-size: 0.63rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-top: 3px; letter-spacing: 0.5px; }
+    .gv-winner-list { margin-top: 12px; }
+    .gv-winner-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(16,185,129,0.15);
+      border-radius: var(--radius-xs);
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .gv-winner-rank {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--success), var(--accent));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+    .gv-winner-name { font-weight: 700; font-size: 0.85rem; color: #fff; }
+    .gv-winner-id { font-size: 0.7rem; color: var(--text-dim); font-weight: 600; }
+    .gv-winner-badge {
+      margin-left: auto;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--success);
+    }
   </style>
 </head>
 <body>
@@ -1130,7 +1236,7 @@
     <div class="nav-item" onclick="switchPage('tasks',this)"><i class="fas fa-list-check"></i> Tasks</div>
     <div class="nav-item" onclick="switchPage('games',this)"><i class="fas fa-gamepad"></i> Games</div>
     <div class="nav-item" onclick="switchPage('giveaways',this)"><i class="fas fa-gift"></i> Giveaways</div>
-    <div class="nav-item" onclick="switchPage('sell',this)"><i class="fas fa-store"></i> Sell Accounts</div>
+    <div class="nav-item" onclick="switchPage('giveawayresults',this)"><i class="fas fa-medal"></i> Giveaway Results</div>
 
     <div class="nav-section-title">Monetization</div>
     <div class="nav-item" onclick="switchPage('ads',this)"><i class="fas fa-ad"></i> Ads Network</div>
@@ -1211,14 +1317,6 @@
           </div>
           <div class="stat-card-value" id="ds-ads">—</div>
           <div class="stat-card-label">Ads Watched</div>
-        </div>
-        <div class="stat-card sc-green">
-          <div class="stat-card-top">
-            <div class="stat-card-icon ic-green"><i class="fas fa-store"></i></div>
-          </div>
-          <div class="stat-card-value" id="ds-sellOk">—</div>
-          <div class="stat-card-label">Sell Accepted</div>
-          <div class="stat-card-sub" id="ds-sellOkAmt" style="color:var(--success);">0 TK</div>
         </div>
         <div class="stat-card sc-purple">
           <div class="stat-card-top">
@@ -1541,84 +1639,15 @@
       </div>
     </section>
 
-    <!-- SELL -->
-    <section id="page-sell" class="page-section">
+    <!-- GIVEAWAY RESULTS -->
+    <section id="page-giveawayresults" class="page-section">
       <div class="page-header">
-        <h1>Sell Accounts</h1>
-        <p>Manage account submissions and pricing</p>
+        <h1>Giveaway Results</h1>
+        <p>View completed giveaways, winners, and prize details</p>
       </div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-icon ic-orange"><i class="fas fa-inbox"></i></div>
-          <h3>Pending Submissions<small>Approve or reject sell requests</small></h3>
-        </div>
-        <div id="sellSubContainer">
-          <div class="loading-box"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-header-icon ic-green"><i class="fas fa-store"></i></div>
-          <h3>Sale Platform Settings<small>Enable/disable and set prices</small></h3>
-        </div>
-
-        <div class="sell-platform">
-          <div class="sell-platform-head">
-            <div class="sell-platform-logo logo-gmail"><i class="fab fa-google"></i></div>
-            <div style="flex:1;"><div class="list-item-title">Gmail Account</div><div class="list-item-subtitle">Gmail account sale settings</div></div>
-            <label class="toggle"><input type="checkbox" id="gmailEnabled" checked><span class="toggle-slider"></span></label>
-          </div>
-          <div class="form-group" style="margin:0;"><label class="form-label">Price per Gmail (TK)</label><input type="number" class="form-input" id="gmailPrice" placeholder="50"></div>
-        </div>
-
-        <div class="sell-platform">
-          <div class="sell-platform-head">
-            <div class="sell-platform-logo logo-instagram"><i class="fab fa-instagram"></i></div>
-            <div style="flex:1;"><div class="list-item-title">Instagram ID</div><div class="list-item-subtitle">Instagram account sale settings</div></div>
-            <label class="toggle"><input type="checkbox" id="instaEnabled" checked><span class="toggle-slider"></span></label>
-          </div>
-          <div class="form-group" style="margin:0;"><label class="form-label">Price per Instagram (TK)</label><input type="number" class="form-input" id="instaPrice" placeholder="30"></div>
-        </div>
-
-        <div class="sell-platform">
-          <div class="sell-platform-head">
-            <div class="sell-platform-logo logo-facebook"><i class="fab fa-facebook"></i></div>
-            <div style="flex:1;"><div class="list-item-title">Facebook ID</div><div class="list-item-subtitle">Facebook account sale settings</div></div>
-            <label class="toggle"><input type="checkbox" id="fbEnabled" checked><span class="toggle-slider"></span></label>
-          </div>
-          <div class="form-group" style="margin:0;"><label class="form-label">Price per Facebook (TK)</label><input type="number" class="form-input" id="fbPrice" placeholder="40"></div>
-        </div>
-
-        <div class="sell-platform">
-          <div class="sell-platform-head">
-            <div class="sell-platform-logo logo-tiktok"><i class="fab fa-tiktok"></i></div>
-            <div style="flex:1;"><div class="list-item-title">TikTok Account</div><div class="list-item-subtitle">TikTok account sale settings</div></div>
-            <label class="toggle"><input type="checkbox" id="tiktokEnabled" checked><span class="toggle-slider"></span></label>
-          </div>
-          <div class="form-group" style="margin:0;"><label class="form-label">Price per TikTok (TK)</label><input type="number" class="form-input" id="tiktokPrice" placeholder="25"></div>
-        </div>
-
-        <div class="sell-platform">
-          <div class="sell-platform-head">
-            <div class="sell-platform-logo logo-telegram"><i class="fab fa-telegram-plane"></i></div>
-            <div style="flex:1;"><div class="list-item-title">Telegram ID</div><div class="list-item-subtitle">Telegram account sale settings</div></div>
-            <label class="toggle"><input type="checkbox" id="telegramEnabled" checked><span class="toggle-slider"></span></label>
-          </div>
-          <div class="form-group" style="margin:0;"><label class="form-label">Price per Telegram (TK)</label><input type="number" class="form-input" id="telegramPrice" placeholder="35"></div>
-        </div>
-
-        <div class="sell-platform">
-          <div class="sell-platform-head">
-            <div class="sell-platform-logo logo-whatsapp"><i class="fab fa-whatsapp"></i></div>
-            <div style="flex:1;"><div class="list-item-title">WhatsApp ID</div><div class="list-item-subtitle">WhatsApp account sale settings</div></div>
-            <label class="toggle"><input type="checkbox" id="whatsappEnabled" checked><span class="toggle-slider"></span></label>
-          </div>
-          <div class="form-group" style="margin:0;"><label class="form-label">Price per WhatsApp (TK)</label><input type="number" class="form-input" id="whatsappPrice" placeholder="30"></div>
-        </div>
-
-        <button class="btn btn-success btn-block btn-lg" style="margin-top:8px;" onclick="saveSellSettings()"><i class="fas fa-save"></i> Save All Sale Settings</button>
+      <div id="giveawayResultsList">
+        <div class="loading-box"><i class="fas fa-spinner fa-spin"></i><p>Loading results...</p></div>
       </div>
     </section>
 
@@ -1957,6 +1986,41 @@
   </div>
 </div>
 
+<!-- WINNER SELECTION MODAL -->
+<div id="winnerSelectOverlay" class="winner-select-overlay">
+  <div class="winner-select-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div>
+        <div style="font-size:1.1rem;font-weight:900;color:#fff;" id="wsTitle">Select Winners</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);font-weight:500;margin-top:3px;" id="wsSubtitle">Choose number of winners from participants</div>
+      </div>
+      <button class="btn btn-ghost btn-icon" onclick="closeWinnerSelect()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <div id="wsGiveawayInfo" style="margin-bottom:16px;"></div>
+
+    <div class="form-row" style="margin-bottom:16px;">
+      <div class="form-group" style="flex:1;margin:0;">
+        <label class="form-label">Number of Winners</label>
+        <input type="number" class="form-input" id="wsWinnerCount" placeholder="5" min="1">
+      </div>
+      <button class="btn btn-success" id="wsPickBtn" onclick="executeWinnerSelection()" style="margin-bottom:0;align-self:flex-end;"><i class="fas fa-random"></i> Pick Winners</button>
+    </div>
+
+    <div id="wsSelectedWinners" style="display:none;margin-bottom:16px;">
+      <div style="font-size:0.85rem;font-weight:800;color:var(--success);margin-bottom:10px;display:flex;align-items:center;gap:8px;"><i class="fas fa-trophy"></i> Selected Winners</div>
+      <div id="wsWinnersList"></div>
+    </div>
+
+    <div style="font-size:0.85rem;font-weight:800;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px;"><i class="fas fa-users"></i> All Participants (<span id="wsPartCount">0</span>)</div>
+    <div id="wsParticipantsList" style="max-height:300px;overflow-y:auto;"></div>
+
+    <div id="wsSaveArea" style="display:none;margin-top:16px;">
+      <button class="btn btn-primary btn-block btn-lg" onclick="saveSelectedWinners()"><i class="fas fa-save"></i> Confirm & Save Winners</button>
+    </div>
+  </div>
+</div>
+
 <script>
   // FIREBASE
   const firebaseConfig = {
@@ -1976,6 +2040,11 @@
   let allUsersCache = {};
   let pendingConfirmFn = null;
   let channelSlots = 5;
+
+  // Winner selection state
+  let wsCurrentGiveawayKey = null;
+  let wsCurrentGiveawayData = null;
+  let wsPickedWinners = [];
 
   const BOT_TOKEN = "8923778586:AAG2BjGFtD-Hrsat50LpYcd06V1QTqkPeM4";
   document.getElementById('botToken').value = BOT_TOKEN;
@@ -2026,9 +2095,9 @@
     closeSidebar();
 
     if(id === 'dashboard') loadDashboard();
-    if(id === 'sell') loadSellSettings();
     if(id === 'promo') loadPromoCodes();
     if(id === 'giveaways') loadGiveaways();
+    if(id === 'giveawayresults') loadGiveawayResults();
   }
 
   // TASK TABS
@@ -2148,7 +2217,6 @@
     // Tasks
     renderTasksList();
     loadRefTasks();
-    loadSellSettings();
     loadPromoCodes();
     // Update total prize calc
     calcTotalPrize();
@@ -2203,13 +2271,6 @@
       document.getElementById('ds-pendingAmt').innerText = pendingAmt.toFixed(0)+' '+cur;
       const badge = document.getElementById('navWdBadge');
       if(pending > 0){ badge.style.display='inline'; badge.innerText=pending; } else { badge.style.display='none'; }
-    });
-
-    db.ref('sellSubmissions').once('value', snap => {
-      let accepted=0, acceptedAmt=0;
-      if(snap.exists()){ snap.forEach(child => { const s = child.val(); if(s.status==='done'){ accepted++; acceptedAmt += getItemPrice(s.type); } }); }
-      document.getElementById('ds-sellOk').innerText = accepted;
-      document.getElementById('ds-sellOkAmt').innerText = acceptedAmt.toFixed(0)+' '+cur;
     });
   }
 
@@ -2385,7 +2446,6 @@
 
   // ═══ GAMES - Save to BOTH config/gameSettings AND config/games ═══
   function loadGameSettings() {
-    // Try config/games first (user panel reads from here), fallback to config/gameSettings
     const g = configData.games || configData.gameSettings || {};
     const games = ['Spin','Lucky','Scratch','Guess'];
     games.forEach(name => {
@@ -2402,7 +2462,6 @@
       if(cdEl) cdEl.value = data.cooldown || '';
       if(limEl) limEl.value = data.dailyLimit || '';
     });
-    // Anti-abuse
     const aa = g.antiAbuse || {};
     document.getElementById('gameAntiIp').checked = aa.ipLimit !== false;
     document.getElementById('gameRequireAd').checked = aa.requireAd !== false;
@@ -2423,7 +2482,6 @@
         minAgeHours: Number(document.getElementById('gameMinAgeHours').value||24)
       }
     };
-    // Save to BOTH paths so user panel always gets the update
     await Promise.all([
       db.ref('config/gameSettings').set(gameData),
       db.ref('config/games').set(gameData)
@@ -2456,13 +2514,11 @@
       status: 'active', participants: {}, winners: {}, createdAt: Date.now()
     });
 
-    // Clear form
     ['gvTitle','gvDesc','gvReward','gvMaxPart','gvWinners','gvEndDate','gvMinRefs'].forEach(id2 => { const el = document.getElementById(id2); if(el) el.value=''; });
     calcTotalPrize();
     toast('✅ Giveaway created!');
     loadGiveaways();
 
-    // Broadcast
     const uids = Object.keys(allUsersCache);
     const cur = configData.currencySymbol || 'TK';
     const msg = notifyInfo({ emoji:'🎁', title:'নতুন গিভঅ্যাওয়ে!', lines:[`<b>${title}</b>`,``,`🏆 পুরস্কার: ${reward} ${cur} × ${winners} জন`,`💰 মোট পুরস্কার: ${totalPrize} ${cur}`,`👥 সর্বোচ্চ অংশগ্রহণ: ${maxPart} জন`,``,`এখনই যোগ দিন!`] });
@@ -2473,7 +2529,7 @@
     const snap = await db.ref('giveaways').once('value');
     const el = document.getElementById('giveawaysList');
     const cur = configData.currencySymbol || 'TK';
-    if(!snap.exists()){ el.innerHTML='<div class="empty-state"><i class="fas fa-gift"></i><p>No giveaways yet.</p></div>'; return; }
+    if(!snap.exists()){ el.innerHTML='<div class="empty-state"><i class="fas fa-gift"></i><p>No giveaways yet. Create one above!</p></div>'; return; }
 
     let html = '';
     snap.forEach(child => {
@@ -2481,9 +2537,15 @@
       const parts = g.participants ? Object.keys(g.participants).length : 0;
       const pct = g.maxParticipants > 0 ? Math.min((parts/g.maxParticipants)*100, 100) : 0;
       const isActive = g.status === 'active' && Date.now() < g.endDate;
+      const isCompleted = g.status === 'completed';
       const endStr = new Date(g.endDate).toLocaleString();
-      const statusBadge = isActive ? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-red">Ended</span>';
       const totalPrize = g.totalPrize || (g.reward * g.winnerCount);
+      const winnerCount = g.winners ? Object.keys(g.winners).length : 0;
+
+      let statusBadge;
+      if(isCompleted) statusBadge = '<span class="badge badge-green"><i class="fas fa-check" style="margin-right:4px;"></i>Completed</span>';
+      else if(isActive) statusBadge = '<span class="badge badge-green">Active</span>';
+      else statusBadge = '<span class="badge badge-orange">Ended</span>';
 
       html += `
       <div class="giveaway-card">
@@ -2493,13 +2555,14 @@
         </div>
         <div class="giveaway-meta">
           🏆 <b>${g.reward} ${cur}</b> × ${g.winnerCount} winners &nbsp;|&nbsp; 💰 <b>Total: ${totalPrize.toLocaleString()} ${cur}</b><br>
-          👥 ${parts}/${g.maxParticipants} participants<br>
+          👥 ${parts}/${g.maxParticipants} participants${winnerCount > 0 ? ` &nbsp;|&nbsp; 🎖️ ${winnerCount} winners selected` : ''}<br>
           ⏰ Ends: ${endStr} &nbsp;|&nbsp; Method: ${g.method}
         </div>
         <div class="giveaway-progress"><div class="giveaway-progress-fill" style="width:${pct}%;"></div></div>
-        <div style="display:flex;gap:8px;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
           ${isActive ? `<button class="btn btn-warn btn-sm" onclick="endGiveaway('${key}')"><i class="fas fa-stop"></i> End Now</button>` : ''}
-          <button class="btn btn-success btn-sm" onclick="pickWinners('${key}')"><i class="fas fa-trophy"></i> Pick Winners</button>
+          ${!isCompleted ? `<button class="btn btn-primary btn-sm" onclick="openWinnerSelection('${key}')"><i class="fas fa-crown"></i> Select Winners</button>` : ''}
+          ${isCompleted ? `<button class="btn btn-primary btn-sm" onclick="openWinnerSelection('${key}')"><i class="fas fa-crown"></i> Re-select Winners</button>` : ''}
           <button class="btn btn-danger btn-sm" onclick="deleteGiveaway('${key}')"><i class="fas fa-trash"></i> Delete</button>
         </div>
       </div>`;
@@ -2513,29 +2576,171 @@
     loadGiveaways();
   }
 
-  async function pickWinners(key) {
+  // ═══ WINNER SELECTION SYSTEM ═══
+  function closeWinnerSelect() {
+    document.getElementById('winnerSelectOverlay').classList.remove('show');
+    wsCurrentGiveawayKey = null;
+    wsCurrentGiveawayData = null;
+    wsPickedWinners = [];
+  }
+
+  async function openWinnerSelection(key) {
     const snap = await db.ref('giveaways/'+key).once('value');
     if(!snap.exists()) return toast('Giveaway not found');
     const g = snap.val();
+    wsCurrentGiveawayKey = key;
+    wsCurrentGiveawayData = g;
+    wsPickedWinners = [];
+
+    const cur = configData.currencySymbol || 'TK';
     const participants = g.participants ? Object.keys(g.participants) : [];
-    if(!participants.length) return toast('No participants');
-    const winnerCount = Math.min(g.winnerCount || 1, participants.length);
+    const totalPrize = g.totalPrize || (g.reward * g.winnerCount);
+
+    // Title
+    document.getElementById('wsTitle').innerText = 'Select Winners — ' + g.title;
+    document.getElementById('wsSubtitle').innerText = `${participants.length} participants | ${g.reward} ${cur} per winner`;
+
+    // Info box
+    document.getElementById('wsGiveawayInfo').innerHTML = `
+      <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:var(--radius-sm);padding:14px;">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div style="text-align:center;flex:1;min-width:80px;"><div style="font-size:1.1rem;font-weight:900;color:var(--primary-light);">${participants.length}</div><div style="font-size:0.65rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;">Participants</div></div>
+          <div style="text-align:center;flex:1;min-width:80px;"><div style="font-size:1.1rem;font-weight:900;color:var(--warn);">${g.winnerCount}</div><div style="font-size:0.65rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;">Max Winners</div></div>
+          <div style="text-align:center;flex:1;min-width:80px;"><div style="font-size:1.1rem;font-weight:900;color:var(--success);">${g.reward} ${cur}</div><div style="font-size:0.65rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;">Per Winner</div></div>
+          <div style="text-align:center;flex:1;min-width:80px;"><div style="font-size:1.1rem;font-weight:900;color:#fff;">${totalPrize.toLocaleString()} ${cur}</div><div style="font-size:0.65rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;">Total Prize</div></div>
+        </div>
+      </div>`;
+
+    // Set suggested winner count
+    document.getElementById('wsWinnerCount').value = Math.min(g.winnerCount || 1, participants.length);
+    document.getElementById('wsWinnerCount').max = participants.length;
+
+    // Participant count
+    document.getElementById('wsPartCount').innerText = participants.length;
+
+    // Render participant list
+    let partHtml = '';
+    if(!participants.length) {
+      partHtml = '<div class="empty-state" style="padding:20px;"><i class="fas fa-users"></i><p>No participants have joined this giveaway yet.</p></div>';
+    } else {
+      for(const uid of participants) {
+        const u = allUsersCache[uid] || {};
+        const name = u.name || 'Unknown';
+        const initial = name[0].toUpperCase();
+        partHtml += `
+        <div class="participant-item" id="pItem_${uid}">
+          <div class="p-avatar">${initial}</div>
+          <div style="flex:1;">
+            <div class="p-name">${name}</div>
+            <div class="p-id">ID: ${uid}</div>
+          </div>
+        </div>`;
+      }
+    }
+    document.getElementById('wsParticipantsList').innerHTML = partHtml;
+
+    // Hide winners section and save area
+    document.getElementById('wsSelectedWinners').style.display = 'none';
+    document.getElementById('wsSaveArea').style.display = 'none';
+    document.getElementById('wsPickBtn').disabled = participants.length === 0;
+
+    // Show modal
+    document.getElementById('winnerSelectOverlay').classList.add('show');
+  }
+
+  function executeWinnerSelection() {
+    if(!wsCurrentGiveawayData) return;
+    const participants = wsCurrentGiveawayData.participants ? Object.keys(wsCurrentGiveawayData.participants) : [];
+    if(!participants.length) return toast('No participants to pick from');
+
+    const count = Number(document.getElementById('wsWinnerCount').value || 1);
+    if(count <= 0) return toast('Enter a valid winner count');
+    if(count > participants.length) return toast(`Only ${participants.length} participants available`);
+
+    // Fisher-Yates shuffle for true randomness
+    const shuffled = [...participants];
+    for(let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    // Pick unique winners (no duplicates by design since we slice from shuffled unique array)
+    wsPickedWinners = shuffled.slice(0, count);
+
     const cur = configData.currencySymbol || 'TK';
 
-    const shuffled = participants.sort(() => 0.5 - Math.random());
-    const winners = shuffled.slice(0, winnerCount);
+    // Remove previous winner highlights from participant list
+    document.querySelectorAll('.participant-item').forEach(el => el.classList.remove('is-winner'));
+
+    // Highlight winners in participant list
+    wsPickedWinners.forEach(uid => {
+      const el = document.getElementById('pItem_' + uid);
+      if(el) el.classList.add('is-winner');
+    });
+
+    // Show selected winners section
+    let winHtml = '';
+    wsPickedWinners.forEach((uid, idx) => {
+      const u = allUsersCache[uid] || {};
+      const name = u.name || 'Unknown';
+      const initial = name[0].toUpperCase();
+      winHtml += `
+      <div class="participant-item is-winner">
+        <div class="p-avatar" style="background:linear-gradient(135deg,var(--success),var(--accent));">${idx+1}</div>
+        <div style="flex:1;">
+          <div class="p-name" style="color:var(--success-light);">${name}</div>
+          <div class="p-id">ID: ${uid}</div>
+        </div>
+        <div style="font-size:0.82rem;font-weight:800;color:var(--success);">+${wsCurrentGiveawayData.reward} ${cur}</div>
+      </div>`;
+    });
+    document.getElementById('wsWinnersList').innerHTML = winHtml;
+    document.getElementById('wsSelectedWinners').style.display = 'block';
+    document.getElementById('wsSaveArea').style.display = 'block';
+
+    toast(`🎲 ${wsPickedWinners.length} winners randomly selected!`);
+  }
+
+  async function saveSelectedWinners() {
+    if(!wsCurrentGiveawayKey || !wsPickedWinners.length) return toast('No winners selected');
+
+    const cur = configData.currencySymbol || 'TK';
+    const g = wsCurrentGiveawayData;
     const winnersObj = {};
-    for(const uid of winners) {
-      winnersObj[uid] = true;
+
+    for(const uid of wsPickedWinners) {
+      winnersObj[uid] = { selectedAt: Date.now() };
+
+      // Credit reward to winner
       const uSnap = await db.ref('users/'+uid).once('value');
       if(uSnap.exists()) {
         const u = uSnap.val();
-        await db.ref('users/'+uid).update({ balance: (u.balance||0) + g.reward, totalEarned: (u.totalEarned||0) + g.reward });
-        sendTgMsg(uid, notifyApproved({ title:'🎉 আপনি জিতেছেন!', lines:[`অভিনন্দন! আপনি <b>${g.title}</b> গিভঅ্যাওয়েতে জিতেছেন!`,``,`🏆 <b>পুরস্কার:</b> +${g.reward} ${cur}`,`💰 আপনার ব্যালেন্সে যোগ করা হয়েছে।`] }));
+        await db.ref('users/'+uid).update({
+          balance: (u.balance||0) + g.reward,
+          totalEarned: (u.totalEarned||0) + g.reward
+        });
+        // Notify winner
+        sendTgMsg(uid, notifyApproved({
+          title:'🎉 আপনি জিতেছেন!',
+          lines:[
+            `অভিনন্দন! আপনি <b>${g.title}</b> গিভঅ্যাওয়েতে জিতেছেন!`,
+            ``,
+            `🏆 <b>পুরস্কার:</b> +${g.reward} ${cur}`,
+            `💰 আপনার ব্যালেন্সে যোগ করা হয়েছে।`
+          ]
+        }));
       }
     }
-    await db.ref('giveaways/'+key).update({ status:'completed', winners: winnersObj });
-    toast(`✅ ${winners.length} winners picked & rewarded!`);
+
+    // Save winners and mark as completed
+    await db.ref('giveaways/'+wsCurrentGiveawayKey).update({
+      status: 'completed',
+      winners: winnersObj,
+      completedAt: Date.now()
+    });
+
+    toast(`✅ ${wsPickedWinners.length} winners saved & rewarded!`);
+    closeWinnerSelect();
     loadGiveaways();
   }
 
@@ -2543,122 +2748,130 @@
     showConfirm({ icon:'<i class="fas fa-trash"></i>', iconClass:'ic-red', title:'Delete Giveaway?', msg:'Permanently remove this giveaway?', btnLabel:'<i class="fas fa-trash"></i> Delete', btnClass:'btn-danger', onConfirm: async () => { await db.ref('giveaways/'+key).remove(); toast('🗑️ Giveaway deleted'); loadGiveaways(); } });
   }
 
-  // SELL
-  function loadSellSettings() {
-    const sale = configData.saleSettings || {};
-    const items = ['gmail','insta','fb','tiktok','telegram','whatsapp'];
-    items.forEach(key => {
-      const enEl = document.getElementById(key+'Enabled');
-      const prEl = document.getElementById(key+'Price');
-      if(enEl) enEl.checked = sale[key+'Enabled'] !== false;
-      if(prEl) prEl.value = sale[key+'Price'] || '';
-    });
-  }
-
-  async function saveSellSettings() {
-    const saleData = {
-      gmailEnabled: document.getElementById('gmailEnabled').checked, gmailPrice: Number(document.getElementById('gmailPrice').value||0),
-      instaEnabled: document.getElementById('instaEnabled').checked, instaPrice: Number(document.getElementById('instaPrice').value||0),
-      fbEnabled: document.getElementById('fbEnabled').checked, fbPrice: Number(document.getElementById('fbPrice').value||0),
-      tiktokEnabled: document.getElementById('tiktokEnabled').checked, tiktokPrice: Number(document.getElementById('tiktokPrice').value||0),
-      telegramEnabled: document.getElementById('telegramEnabled').checked, telegramPrice: Number(document.getElementById('telegramPrice').value||0),
-      whatsappEnabled: document.getElementById('whatsappEnabled').checked, whatsappPrice: Number(document.getElementById('whatsappPrice').value||0),
-    };
-    await db.ref('config/saleSettings').set(saleData);
-    toast('✅ Sale settings saved!');
-  }
-
-  function getItemPrice(type) {
-    const sale = configData.saleSettings || {};
-    if(type==='gmail') return Number(sale.gmailPrice||0);
-    if(type==='instagram') return Number(sale.instaPrice||0);
-    if(type==='facebook') return Number(sale.fbPrice||0);
-    if(type==='tiktok') return Number(sale.tiktokPrice||0);
-    if(type==='telegram') return Number(sale.telegramPrice||0);
-    if(type==='whatsapp') return Number(sale.whatsappPrice||0);
-    return 0;
-  }
-
-  const TYPE_LABELS = {gmail:'Gmail',instagram:'Instagram',facebook:'Facebook',tiktok:'TikTok',telegram:'Telegram',whatsapp:'WhatsApp'};
-
-  // SELL SUBMISSIONS LISTENER
-  db.ref('sellSubmissions').orderByChild('status').equalTo('pending').on('value', snap => {
-    let html = '';
+  // ═══ GIVEAWAY RESULTS PAGE ═══
+  async function loadGiveawayResults() {
+    const el = document.getElementById('giveawayResultsList');
+    const snap = await db.ref('giveaways').once('value');
     const cur = configData.currencySymbol || 'TK';
-    if(snap.exists()){
-      snap.forEach(child => {
-        let item = child.val(), key = child.key;
-        let date = new Date(item.timestamp).toLocaleString();
-        let typeIcon = 'fa-envelope', typeLabel = item.type;
-        if(item.type==='gmail'){ typeIcon='fab fa-google'; typeLabel='Gmail'; }
-        else if(item.type==='instagram'){ typeIcon='fab fa-instagram'; typeLabel='Instagram'; }
-        else if(item.type==='facebook'){ typeIcon='fab fa-facebook'; typeLabel='Facebook'; }
-        else if(item.type==='tiktok'){ typeIcon='fab fa-tiktok'; typeLabel='TikTok'; }
-        else if(item.type==='telegram'){ typeIcon='fab fa-telegram-plane'; typeLabel='Telegram'; }
-        else if(item.type==='whatsapp'){ typeIcon='fab fa-whatsapp'; typeLabel='WhatsApp'; }
-        let dataStr = '';
-        if(item.type==='gmail') dataStr=`Email: ${item.email||'—'} | Password: ${item.password||'—'}${item.recovery?' | Recovery: '+item.recovery:''}`;
-        else if(item.type==='instagram') dataStr=`Username: ${item.username||'—'} | Password: ${item.password||'—'} | Followers: ${item.followers||'0'}`;
-        else if(item.type==='facebook') dataStr=`Email/User: ${item.email||item.username||'—'} | Password: ${item.password||'—'} | Friends: ${item.friends||'0'}`;
-        else if(item.type==='tiktok') dataStr=`Username: ${item.username||'—'} | Password: ${item.password||'—'} | Followers: ${item.followers||'0'}`;
-        else if(item.type==='telegram'){ const phone = item.number||item.phone||item.contact||item.account||'—'; dataStr=`Username: ${item.username||'—'} | Number: ${phone} | 2FA: ${item.password||'—'}`; }
-        else if(item.type==='whatsapp'){ dataStr=`Number: ${item.number||item.phone||'—'}${item.accountType?' | Type: '+item.accountType:''} | Note: ${item.note||item.password||'—'}`; }
-        else dataStr = Object.keys(item).filter(k=>!['key','type','status','timestamp','userId','userName'].includes(k)).map(k=>`${k}: ${item[k]}`).join(' | ');
-        const price = getItemPrice(item.type);
-        html += `
-        <div class="list-item">
-          <div class="list-item-header">
-            <div class="list-item-icon ${item.type==='gmail'?'logo-gmail':item.type==='instagram'?'logo-instagram':item.type==='facebook'?'logo-facebook':item.type==='tiktok'?'logo-tiktok':item.type==='telegram'?'logo-telegram':'logo-whatsapp'}"><i class="${typeIcon}"></i></div>
-            <div class="list-item-info">
-              <div class="list-item-title">${typeLabel} <span class="badge badge-purple">${price>0?price+' '+cur:'Free'}</span></div>
-              <div class="list-item-subtitle">${item.userName||'—'} (ID: ${item.userId}) • ${date}</div>
-            </div>
-          </div>
-          <div style="background:rgba(0,0,0,0.2);padding:10px 12px;border-radius:8px;font-size:.8rem;color:var(--text-muted);margin-bottom:12px;word-break:break-all;">${dataStr}</div>
-          <div class="list-item-actions">
-            <button class="btn btn-success btn-sm" onclick="markSellDone('${key}','${item.userId}','${item.type}','${item.userName||'User'}')"><i class="fas fa-check"></i> Approve</button>
-            <button class="btn btn-danger btn-sm" onclick="rejectSellSub('${key}','${item.userId}','${item.type}','${item.userName||'User'}')"><i class="fas fa-times"></i> Reject</button>
-          </div>
-        </div>`;
-      });
-    }
-    document.getElementById('sellSubContainer').innerHTML = html || '<div class="empty-state"><i class="fas fa-inbox"></i><p>No pending sell requests.</p></div>';
-  });
 
-  async function markSellDone(key, userId, type, userName) {
-    const price = getItemPrice(type);
-    const typeLabel = TYPE_LABELS[type] || type;
-    const cur = configData.currencySymbol||'TK';
-    showConfirm({
-      icon:'<i class="fas fa-check-circle"></i>', iconClass:'ic-green',
-      title:'Approve Submission?', amtBadge: price>0 ? `${price} ${cur}` : null,
-      msg:`Approve ${userName}'s ${typeLabel} account${price>0?' and pay '+price+' '+cur:''}?`,
-      btnLabel:'<i class="fas fa-check"></i> Approve', btnClass:'btn-success',
-      onConfirm: async () => {
-        await db.ref('sellSubmissions/'+key).update({ status:'done', reviewedAt:Date.now() });
-        if(price > 0) {
-          const snap = await db.ref('users/'+userId).once('value');
-          if(snap.exists()){
-            const u = snap.val();
-            await db.ref('users/'+userId).update({ balance:(u.balance||0)+price, totalEarned:(u.totalEarned||0)+price });
-            sendTgMsg(userId, notifyApproved({ title:'একাউন্ট সেল সফল!', lines:[`অভিনন্দন <b>${userName}</b>! <b>${typeLabel}</b> একাউন্ট অনুমোদিত।`,``,`💰 <b>পেমেন্ট:</b> +${price} ${cur}`,`📊 <b>নতুন ব্যালেন্স:</b> ${((u.balance||0)+price).toFixed(2)} ${cur}`] }));
-          }
-        } else { sendTgMsg(userId, notifyApproved({ title:'একাউন্ট অ্যাপ্রুভড!', lines:[`<b>${userName}</b>, আপনার <b>${typeLabel}</b> একাউন্ট অনুমোদন হয়েছে। ✅`] })); }
-        toast('✅ Approved' + (price ? ' & +'+price+' paid!' : ''));
+    if(!snap.exists()) {
+      el.innerHTML = '<div class="empty-state"><i class="fas fa-medal"></i><p>No giveaway results yet.</p></div>';
+      return;
+    }
+
+    // Filter completed giveaways
+    let completedGiveaways = [];
+    snap.forEach(child => {
+      const g = child.val();
+      if(g.status === 'completed' && g.winners && Object.keys(g.winners).length > 0) {
+        completedGiveaways.push({ key: child.key, data: g });
       }
     });
+
+    if(!completedGiveaways.length) {
+      el.innerHTML = '<div class="empty-state"><i class="fas fa-medal"></i><p>No completed giveaways with winners yet.</p></div>';
+      return;
+    }
+
+    // Sort by completedAt (most recent first)
+    completedGiveaways.sort((a, b) => (b.data.completedAt || b.data.endDate || 0) - (a.data.completedAt || a.data.endDate || 0));
+
+    let html = '';
+    for(const gv of completedGiveaways) {
+      const g = gv.data;
+      const key = gv.key;
+      const participants = g.participants ? Object.keys(g.participants).length : 0;
+      const winners = g.winners ? Object.keys(g.winners) : [];
+      const totalPrize = g.totalPrize || (g.reward * (g.winnerCount || winners.length));
+      const endDateStr = g.endDate ? new Date(g.endDate).toLocaleString('en-GB', { hour12: true }) : 'N/A';
+      const completedDateStr = g.completedAt ? new Date(g.completedAt).toLocaleString('en-GB', { hour12: true }) : endDateStr;
+
+      // Winner list HTML
+      let winnerHtml = '';
+      let rank = 1;
+      for(const uid of winners) {
+        const u = allUsersCache[uid] || {};
+        const name = u.name || 'Unknown';
+        const selTime = g.winners[uid] && g.winners[uid].selectedAt ? new Date(g.winners[uid].selectedAt).toLocaleString('en-GB', { hour12: true }) : completedDateStr;
+        winnerHtml += `
+        <div class="gv-winner-item">
+          <div class="gv-winner-rank">${rank}</div>
+          <div style="flex:1;">
+            <div class="gv-winner-name">${name}</div>
+            <div class="gv-winner-id">ID: ${uid}</div>
+          </div>
+          <div class="gv-winner-badge">+${g.reward} ${cur}</div>
+        </div>`;
+        rank++;
+      }
+
+      html += `
+      <div class="gv-result-card">
+        <div class="gv-result-head">
+          <div class="gv-result-icon"><i class="fas fa-trophy"></i></div>
+          <div style="flex:1;">
+            <div class="gv-result-title">${g.title}</div>
+            <div class="gv-result-desc">${g.description || 'No description provided.'}</div>
+          </div>
+          <span class="badge badge-green"><i class="fas fa-check" style="margin-right:4px;"></i>Completed</span>
+        </div>
+
+        <div class="gv-result-stats">
+          <div class="gv-result-stat">
+            <div class="gv-result-stat-val">${participants}</div>
+            <div class="gv-result-stat-label">Participants</div>
+          </div>
+          <div class="gv-result-stat">
+            <div class="gv-result-stat-val">${winners.length}</div>
+            <div class="gv-result-stat-label">Winners</div>
+          </div>
+          <div class="gv-result-stat">
+            <div class="gv-result-stat-val">${g.reward} ${cur}</div>
+            <div class="gv-result-stat-label">Per Winner</div>
+          </div>
+          <div class="gv-result-stat">
+            <div class="gv-result-stat-val" style="color:var(--warn);">${totalPrize.toLocaleString()} ${cur}</div>
+            <div class="gv-result-stat-label">Total Prize</div>
+          </div>
+          <div class="gv-result-stat">
+            <div class="gv-result-stat-val" style="font-size:0.78rem;">${endDateStr}</div>
+            <div class="gv-result-stat-label">End Date</div>
+          </div>
+          <div class="gv-result-stat">
+            <div class="gv-result-stat-val" style="font-size:0.78rem;">${completedDateStr}</div>
+            <div class="gv-result-stat-label">Selection Date</div>
+          </div>
+        </div>
+
+        <div style="font-size:0.85rem;font-weight:800;color:#fff;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+          <i class="fas fa-medal" style="color:var(--warn);"></i> Winner List
+        </div>
+        <div class="gv-winner-list">
+          ${winnerHtml}
+        </div>
+
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <button class="btn btn-danger btn-sm" onclick="deleteGiveawayResult('${key}')"><i class="fas fa-trash"></i> Remove Result</button>
+        </div>
+      </div>`;
+    }
+
+    el.innerHTML = html;
   }
 
-  async function rejectSellSub(key, userId, type, userName) {
-    const typeLabel = TYPE_LABELS[type] || type;
+  async function deleteGiveawayResult(key) {
     showConfirm({
-      icon:'<i class="fas fa-times-circle"></i>', iconClass:'ic-red',
-      title:'Reject Submission?', msg:`Reject ${userName}'s ${typeLabel} submission?`,
-      btnLabel:'<i class="fas fa-times"></i> Reject', btnClass:'btn-danger',
+      icon: '<i class="fas fa-trash"></i>',
+      iconClass: 'ic-red',
+      title: 'Remove Giveaway Result?',
+      msg: 'This will permanently delete this giveaway and its results.',
+      btnLabel: '<i class="fas fa-trash"></i> Delete',
+      btnClass: 'btn-danger',
       onConfirm: async () => {
-        await db.ref('sellSubmissions/'+key).update({ status:'rejected', reviewedAt:Date.now() });
-        sendTgMsg(userId, notifyRejected({ title:'একাউন্ট বাতিল', lines:[`<b>${userName}</b>, আপনার <b>${typeLabel}</b> একাউন্ট বাতিল হয়েছে।`,``,`সঠিক তথ্য দিয়ে আবার চেষ্টা করুন।`] }));
-        toast('❌ Submission Rejected');
+        await db.ref('giveaways/'+key).remove();
+        toast('🗑️ Giveaway result removed');
+        loadGiveawayResults();
+        loadGiveaways();
       }
     });
   }
